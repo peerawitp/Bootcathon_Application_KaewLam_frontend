@@ -7,8 +7,14 @@ interface UseLineInfoProps {
 }
 
 export const useLineInfo = ({ liff, status }: UseLineInfoProps) => {
-  const { displayName, pictureUrl, setDisplayName, setPictureUrl } =
-    useLineStore();
+  const {
+    userId,
+    displayName,
+    pictureUrl,
+    setUserId,
+    setDisplayName,
+    setPictureUrl,
+  } = useLineStore();
 
   useEffect(() => {
     if (status !== "inited") return;
@@ -16,18 +22,19 @@ export const useLineInfo = ({ liff, status }: UseLineInfoProps) => {
     liff
       ?.getProfile()
       .then((profile: any) => {
+        setUserId(profile.userId);
         setDisplayName(profile.displayName);
         setPictureUrl(profile.pictureUrl);
       })
       .catch((err: any) => {
         console.error({ err });
       });
-  }, [liff, status, setDisplayName, setPictureUrl]);
+  }, [liff, status, setUserId, setDisplayName, setPictureUrl]);
 
   const version = liff?.getVersion();
 
   return {
-    profile: { displayName, pictureUrl },
+    profile: { userId, displayName, pictureUrl },
     version,
   };
 };
