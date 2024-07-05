@@ -11,9 +11,11 @@ export const useLineInfo = ({ liff, status }: UseLineInfoProps) => {
     userId,
     displayName,
     pictureUrl,
+    idToken,
     setUserId,
     setDisplayName,
     setPictureUrl,
+    setIdToken,
   } = useLineStore();
 
   useEffect(() => {
@@ -29,11 +31,15 @@ export const useLineInfo = ({ liff, status }: UseLineInfoProps) => {
       .catch((err: any) => {
         console.error({ err });
       });
-  }, [liff, status, setUserId, setDisplayName, setPictureUrl]);
+
+    const idToken = liff?.getIDToken();
+    setIdToken(idToken);
+  }, [liff, status, setUserId, setDisplayName, setPictureUrl, setIdToken]);
 
   const version = liff?.getVersion();
 
   return {
+    idToken,
     profile: { userId, displayName, pictureUrl },
     version,
   };

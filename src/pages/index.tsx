@@ -6,7 +6,10 @@ import { useLineInfo } from "../hooks/useLineInfo";
 function IndexPage() {
   const { liffObject, status, login, logout } = useLine();
 
-  const { profile, version } = useLineInfo({ liff: liffObject, status });
+  const { idToken, profile, version } = useLineInfo({
+    liff: liffObject,
+    status,
+  });
 
   console.log({ profile, version });
 
@@ -40,6 +43,7 @@ function IndexPage() {
             <img src={profile.pictureUrl} />
             <p>{profile.userId}</p>
             <p>{JSON.stringify(liffObject)}</p>
+            <p>{idToken}</p>
           </div>
         </div>
       </div>
