@@ -1,15 +1,16 @@
 import { create } from "zustand";
+import type { Liff } from "@line/liff";
 
 export type Status = "signin" | "inited";
 
 interface LineState {
-  liffObject: any | null;
+  liffObject: Liff | null;
   status: Status;
   userId: string;
   displayName: string;
   pictureUrl: string;
   idToken: string;
-  setLiffObject: (liffObject: any) => void;
+  setLiffObject: (liffObject: Liff) => void;
   setStatus: (status: Status) => void;
   setUserId: (userId: string) => void;
   setDisplayName: (displayName: string) => void;
