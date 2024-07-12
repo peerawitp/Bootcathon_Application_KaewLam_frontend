@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import liff from "@line/liff";
 
-import { useLineStore } from "../stores/lineStore";
+import { useLineStore } from "@/stores/lineStore";
 
 export type Status = "signin" | "inited";
 
@@ -29,7 +29,7 @@ export const useLine = () => {
         console.error({ err });
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [liffObject]);
 
   return {
     liffObject,

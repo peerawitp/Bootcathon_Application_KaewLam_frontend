@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { useLine } from "../hooks/useLine";
-import { useLineInfo } from "../hooks/useLineInfo";
+import { useLine } from "@/hooks/useLine";
+import { useLineInfo } from "@/hooks/useLineInfo";
 
 function IndexPage() {
   const { liffObject, status, login } = useLine();
 
-  const { idToken, profile, version } = useLineInfo({
+  const { profile, version } = useLineInfo({
     liff: liffObject,
     status,
   });
@@ -14,7 +14,7 @@ function IndexPage() {
 
   console.log({ liffObject, status });
 
-  if (status !== "inited") {
+  if (status == "signin") {
     return (
       <>
         <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -36,12 +36,15 @@ function IndexPage() {
     <>
       <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
-          <div>
+          {/* <div>
             <img src={profile.pictureUrl} />
             <p>{profile.userId}</p>
             <p>{JSON.stringify(liffObject)}</p>
             <p>{idToken}</p>
-          </div>
+          </div> */}
+          <h1 className="text-center text-lg text-red-800">
+            Please use in LINE Platform!
+          </h1>
         </div>
       </div>
     </>

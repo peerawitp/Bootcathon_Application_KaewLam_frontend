@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useLineStore, Status } from "../stores/lineStore";
+import { useLineStore, Status } from "@/stores/lineStore";
 
 interface UseLineInfoProps {
   liff: any | null;
