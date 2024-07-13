@@ -26,6 +26,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     if (status === "inited") return children;
     else return <Navigate to="/" />;
   } else {
+    // Loading
     return (
       <div className="flex justify-center items-center h-screen">
         <Lottie options={defaultOptions} height={300} width={300} />
