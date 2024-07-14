@@ -8,4 +8,10 @@ const apiInstance = axios.create({
   timeout: 1000,
 });
 
-export default apiInstance;
+const mapApiInstance = axios.create({
+  baseURL: import.meta.env.VITE_MAP_API,
+  headers: {},
+  timeout: 1000,
+});
+
+export { apiInstance, mapApiInstance };

@@ -7,7 +7,7 @@ interface LayoutProps {
 const CustomerLayout = ({ children }: LayoutProps) => {
   return (
     <>
-      <div>Customer Layout</div>
+      <div></div>
       {children}
     </>
   );
