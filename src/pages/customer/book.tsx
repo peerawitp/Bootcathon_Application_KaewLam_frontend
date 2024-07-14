@@ -3,13 +3,13 @@ import CustomerLayout from "@/components/layouts/CustomerLayout";
 
 import { useLine } from "@/hooks/useLine";
 import { useLineInfo } from "@/hooks/useLineInfo";
+import { useState, useEffect } from "react";
 
 import MapFrame from "@/components/map-frame";
 import SearchBar from "@/components/search-bar";
 
-import { useEffect, useState } from "react";
-
 function CustomerBookPage() {
+  const [message, setMessage] = useState("Fetching...");
   const { liffObject, status } = useLine();
   const { idToken } = useLineInfo({ liff: liffObject, status });
   const [location, setLocation] = useState<any>([13.844757035106669, 100.56749983783186]);
@@ -26,12 +26,14 @@ function CustomerBookPage() {
   }, []);
 
   // API Example
-  apiInstance({
-    method: "GET",
-    url: "/",
-  }).then((res) => {
-    console.log(res);
-  });
+  useEffect(() => {
+    apiInstance({
+      method: "GET",
+      url: "/",
+    }).then((res) => {
+      setMessage(res.data);
+    });
+  }, []);
 
   return (
     <CustomerLayout>
