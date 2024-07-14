@@ -7,6 +7,7 @@ import CustomerBookPage from "@/pages/customer/book";
 
 import { useLine } from "@/hooks/useLine";
 import LoadingCarAnimation from "@/assets/lotties/loading_car.json";
+import ComfirmOrderPage from "@/pages/customer/confirm";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { liffObject, status } = useLine();
@@ -46,6 +47,14 @@ export const Router = () => {
             element={
               <ProtectedRoute>
                 <CustomerBookPage />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/customer/comfirm"
+            element={
+              <ProtectedRoute>
+                <ComfirmOrderPage />
               </ProtectedRoute>
             }
           />
