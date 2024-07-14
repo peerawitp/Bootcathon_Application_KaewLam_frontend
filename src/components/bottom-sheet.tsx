@@ -6,6 +6,17 @@ import {
     SheetHeader,
     SheetTitle,
 } from "@/components/ui/sheet";
+import Lottie from 'react-lottie';
+import LoadingCarAnimation from "@/assets/lotties/loading_car.json";
+
+const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: LoadingCarAnimation,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
 
 interface BottomSheetProps {
     isSheetOpen: boolean;
@@ -15,6 +26,8 @@ interface BottomSheetProps {
     renderItem: (data: any, setLocation: (value: any) => void, setIsSheetOpen: (value: boolean) => void) => ReactNode;
     title: string;
     description: string;
+    loading?: boolean;
+    error?: string | null;
 }
 
 export default function BottomSheet({
@@ -25,6 +38,8 @@ export default function BottomSheet({
     renderItem,
     title,
     description,
+    loading = false,
+    error = null,
 }: BottomSheetProps) {
     const sheetContentRef = useRef<HTMLDivElement>(null);
 
@@ -52,6 +67,26 @@ export default function BottomSheet({
         };
     }, []);
 
+    const renderContent = () => {
+        if (loading) {
+            return (
+                <div className="flex justify-center items-center">
+                    <Lottie options={defaultOptions} height={300} width={300} />
+                </div>
+            )
+        }
+
+        if (error) {
+            return <p>Error: {error}</p>;
+        }
+
+        if (listData.length > 0) {
+            return listData.map((data) => renderItem(data, setLocation, setIsSheetOpen));
+        } else {
+            return <p>No data available</p>;
+        }
+    };
+
     return (
         <div>
             <Sheet key="bottom" open={isSheetOpen} onOpenChange={setIsSheetOpen}>
@@ -68,11 +103,7 @@ export default function BottomSheet({
                         <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"></hr>
                     </SheetHeader>
                     <div className="py-5">
-                        {listData.length > 0 ? (
-                            listData.map((data) => renderItem(data, setLocation, setIsSheetOpen))
-                        ) : (
-                            <p>No data available</p>
-                        )}
+                        {renderContent()}
                     </div>
                 </SheetContent>
             </Sheet>

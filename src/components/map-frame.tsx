@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import BottomSheet from './bottom-sheet';
 import { apiInstance } from '@/api/instance';
 
 const marker_user_icon = new L.Icon({
@@ -65,10 +64,6 @@ const MapFrame: React.FC<MapFrameProps> = ({
   center,
   zoom,
   popUpLabel,
-  setLocation,
-  isSheetOpen,
-  setIsSheetOpen,
-  mapData,
 }) => {
   const [mapCenter, setMapCenter] = useState(center);
   const [centerLocation, setCenterLocation] = useState<any[]>([]);
@@ -128,38 +123,11 @@ const MapFrame: React.FC<MapFrameProps> = ({
         </Marker>
       ))}
       <MapUpdater mapCenter={mapCenter} center={center} />
-      <div className="absolute z-10 bottom-10">
-      <BottomSheet
-            isSheetOpen={isSheetOpen}
-            setIsSheetOpen={setIsSheetOpen}
-            setLocation={setLocation}
-            listData={mapData}
-            renderItem={renderMapItem}
-            title="Map Data"
-            description="Information about the selected location"
-        />
-      </div>
+      
     </MapContainer>
   );
 };
 
-const renderMapItem = (data: any, setLocation: (value: any) => void, setIsSheetOpen: (value: boolean) => void) => (
-  <div
-      key={data.place_id}
-      className="mb-3 hover:cursor-pointer hover:text-blue-600 transition-transform duration-300 ease-in-out bg-slate-100 hover:scale-95 rounded-xl p-5 flex flex-cols-2"
-      onClick={() => {
-          setLocation([data.lat, data.lon]);
-          setIsSheetOpen(false);
-      }}
-  >
-      <div className="flex flex-col">
-          <h2 className="font-bold">{data.name}</h2>
-          <div>
-              <p>location: {data.display_name}</p>
-              <p>type: {data.type}</p>
-          </div>
-      </div>
-  </div>
-);
+
 
 export default MapFrame;

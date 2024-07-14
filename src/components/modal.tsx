@@ -32,7 +32,7 @@ export function Modal({
   }
 
   return (
-    <Dialog open={modal} onOpenChange={setModal}>
+    <Dialog open={modal} onOpenChange={setModal} modal={true}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Adjust Range</DialogTitle>
@@ -42,7 +42,7 @@ export function Modal({
         </DialogHeader>
         <AdjustBar value={value} setValue={setValue} />
         <DialogFooter>
-          <Button onClick={() => handleSubmit()} type="submit">Save changes</Button>
+          <Button onClick={() => handleSubmit()} type="submit">Confirm</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
