@@ -2,21 +2,28 @@ import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { mapApiInstance } from '@/api/instance';
 import { Button } from "@/components/ui/button"
+import { Modal } from '@/components/modal';
 
 interface SearchBarProps {
   setLoading: (value: boolean) => void;
   setError: (value: string | null) => void;
   setMapData: (value: any[]) => void;
   setIsSheetOpen: (value: boolean) => void;
+  value: number;
+  setValue: (value: number) => void;
 }
 
 export default function SearchBar({
   setLoading, 
   setError, 
   setMapData,
-  setIsSheetOpen
+  setIsSheetOpen,
+  value,
+  setValue,
 }: SearchBarProps) {
+
   const [searchTerm, setSearchTerm] = useState('');
+  const [modal, setModal] = useState(false);
 
   const fetchData = async () => {
     if (!searchTerm) return;
@@ -58,7 +65,7 @@ export default function SearchBar({
   }, []);
 
   return (
-    <div className="flex items-center p-2 px-3 bg-white dark:bg-gray-800 rounded-2xl shadow-lg gap-5">
+    <div className="flex items-center p-2 px-3 bg-white dark:bg-gray-800 rounded-2xl shadow-lg gap-3">
       <SearchIcon 
         className="text-gray-500 dark:text-gray-400 hover:cursor-pointer" 
         onClick={() => handleSubmit()} 
@@ -70,7 +77,8 @@ export default function SearchBar({
         value={searchTerm}
         onChange={handleChange}
       />
-      <Button onClick={() => handleSubmit()}>Search</Button>
+      <Button className='border-2' onClick={() => setModal(true)}>Range</Button>
+      <Modal modal={modal} setModal={setModal} value={value} setValue={setValue} setIsSheetOpen={setIsSheetOpen} />
     </div>
   );
 }

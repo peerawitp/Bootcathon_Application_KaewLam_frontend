@@ -1,0 +1,73 @@
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
+import { Slider } from "@/components/ui/slider";
+
+type SliderProps = React.ComponentProps<typeof Slider>;
+
+export function Modal({ 
+  modal, 
+  setModal, 
+  value, 
+  setValue,
+  setIsSheetOpen
+}: { 
+  modal: boolean; 
+  setModal: (value: boolean) => void, 
+  value: number, 
+  setValue: (value: number) => void; 
+  setIsSheetOpen: (value: boolean) => void;
+}) {
+
+  const handleSubmit = () => {
+    setModal(false);
+    setIsSheetOpen(true);
+  }
+
+  return (
+    <Dialog open={modal} onOpenChange={setModal}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Adjust Range</DialogTitle>
+          <DialogDescription>
+            Searching for any Mobil 1 Centers around you.
+          </DialogDescription>
+        </DialogHeader>
+        <AdjustBar value={value} setValue={setValue} />
+        <DialogFooter>
+          <Button onClick={() => handleSubmit()} type="submit">Save changes</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function AdjustBar({ value, setValue }: { value: number, setValue: (value: number) => void; }, { className, ...props }: SliderProps) {
+  
+  const handleSliderChange = (newValue: number[]) => {
+    setValue(newValue[0]);
+  };
+
+  return (
+    <div className="flex flex-col items-center">
+      <Slider
+        defaultValue={[value]}
+        max={100}
+        step={1}
+        className={cn("w-[100%]", className)}
+        onValueChange={handleSliderChange}
+        {...props}
+      />
+      <div className="mt-2 text-center">
+        Distance: {value} km
+      </div>
+    </div>
+  );
+}

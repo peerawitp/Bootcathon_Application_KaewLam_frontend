@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, ReactNode } from 'react';
 import {
     Sheet,
     SheetContent,
@@ -7,17 +7,25 @@ import {
     SheetTitle,
 } from "@/components/ui/sheet";
 
+interface BottomSheetProps {
+    isSheetOpen: boolean;
+    setIsSheetOpen: (value: boolean) => void;
+    setLocation: (value: any) => void;
+    listData: any[];
+    renderItem: (data: any, setLocation: (value: any) => void, setIsSheetOpen: (value: boolean) => void) => ReactNode;
+    title: string;
+    description: string;
+}
+
 export default function BottomSheet({
     isSheetOpen,
     setIsSheetOpen,
     setLocation,
-    mapData,
-}: {
-    isSheetOpen: boolean,
-    setIsSheetOpen: (value: boolean) => void,
-    setLocation: (value: any) => void,
-    mapData: any[],
-}) {
+    listData,
+    renderItem,
+    title,
+    description,
+}: BottomSheetProps) {
     const sheetContentRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -42,8 +50,7 @@ export default function BottomSheet({
                 sheetContent.removeEventListener('scroll', handleScroll);
             }
         };
-    }, [sheetContentRef.current]);
-    
+    }, []);
 
     return (
         <div>
@@ -54,32 +61,15 @@ export default function BottomSheet({
                     ref={sheetContentRef}
                 >
                     <SheetHeader>
-                        <SheetTitle>Map Data</SheetTitle>
+                        <SheetTitle>{title}</SheetTitle>
                         <SheetDescription>
-                            Information about the selected location
+                            {description}
                         </SheetDescription>
                         <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"></hr>
                     </SheetHeader>
                     <div className="py-5">
-                        {mapData.length > 0 ? (
-                            mapData.map((data: any) => (
-                                <div
-                                    key={data.place_id}
-                                    className="mb-3 hover:cursor-pointer hover:text-blue-600 transition-transform duration-300 ease-in-out bg-slate-100 hover:scale-95 rounded-xl p-5 flex flex-cols-2"
-                                    onClick={() => {
-                                        setLocation([data.lat, data.lon]);
-                                        setIsSheetOpen(false);
-                                    }}
-                                >
-                                    <div className="flex flex-col">
-                                        <h2 className="font-bold">{data.name}</h2>
-                                        <div>
-                                            <p>location: {data.display_name}</p>
-                                            <p>type: {data.type}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))
+                        {listData.length > 0 ? (
+                            listData.map((data) => renderItem(data, setLocation, setIsSheetOpen))
                         ) : (
                             <p>No data available</p>
                         )}

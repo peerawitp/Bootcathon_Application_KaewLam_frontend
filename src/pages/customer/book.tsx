@@ -1,38 +1,31 @@
-import { apiInstance } from "@/api/instance";
 import CustomerLayout from "@/components/layouts/CustomerLayout";
-
-import { useLine } from "@/hooks/useLine";
-import { useLineInfo } from "@/hooks/useLineInfo";
 import { useState, useEffect } from "react";
-
 import MapFrame from "@/components/map-frame";
 import SearchBar from "@/components/search-bar";
 
 function CustomerBookPage() {
-  const [message, setMessage] = useState("Fetching...");
-  const { liffObject, status } = useLine();
-  const { idToken } = useLineInfo({ liff: liffObject, status });
-  const [location, setLocation] = useState<any>([13.844757035106669, 100.56749983783186]);
+  const [location, setLocation] = useState<any>([0, 0]);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const [mapData, setMapData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [value, setValue] = useState(0);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
-      setLocation([position.coords.latitude, position.coords.longitude]);
+      setMapData([
+        {
+          "place_id": 0,
+          "lat": position.coords.latitude,
+          "lon": position.coords.longitude,
+          "type": "home",
+          "name": "Your current location",
+          "display_name": "Your current location",
+        }
+      ]);
     });
-  }, []);
-
-  // API Example
-  useEffect(() => {
-    apiInstance({
-      method: "GET",
-      url: "/",
-    }).then((res) => {
-      setMessage(res.data);
-    });
+    setIsSheetOpen(true);
   }, []);
 
   return (
@@ -44,6 +37,8 @@ function CustomerBookPage() {
             setLoading={setLoading} 
             setMapData={setMapData} 
             setIsSheetOpen={setIsSheetOpen} 
+            value={value}
+            setValue={setValue}
           />
         </div>
         
@@ -52,7 +47,7 @@ function CustomerBookPage() {
             center={location}
             setLocation={setLocation}
             zoom={17}
-            popUpLabel="สำนักบริการคอมพิวเตอร์"
+            popUpLabel={'You are here!'}
             isSheetOpen={isSheetOpen}
             setIsSheetOpen={setIsSheetOpen}
             mapData={mapData}
