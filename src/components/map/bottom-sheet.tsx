@@ -28,7 +28,8 @@ interface BottomSheetProps {
 
     setIsSheetOpen: (value: boolean) => void;
     setLocationPoint: (value: any) => void;
-    renderItem: (data: any, setLocationPoint: (value: any) => void, setIsSheetOpen: (value: boolean) => void) => ReactNode;
+    renderItem: (data: any, setLocationPoint: (value: any) => void, 
+    setIsSheetOpen: (value: boolean) => void) => ReactNode;
 }
 
 export default function BottomSheet({
@@ -47,7 +48,7 @@ export default function BottomSheet({
     const contentHeight = isOverflow ? 'h-screen' : 'h-2/3';
 
     const handleScroll = (e: any) => {
-        setIsOverflow(e.target.scrollTop > 1);
+        setIsOverflow(e.target.scrollTop >= 0);
       };
 
     useEffect(() => {
@@ -67,7 +68,11 @@ export default function BottomSheet({
         }
 
         if (listData.length > 0) {
-            return listData.map((data) => renderItem(data, setLocationPoint, setIsSheetOpen));
+            return listData.map((data, index) => (
+                <div key={index}>
+                    {renderItem(data, setLocationPoint, setIsSheetOpen)}
+                </div>
+            ));
         } else {
             return <p>No data available</p>;
         }
