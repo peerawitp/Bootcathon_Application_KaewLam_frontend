@@ -78,7 +78,13 @@ const MapFrame: React.FC<MapFrameProps> = ({
               distance_btw(center, [
                 location.latitude,
                 location.longitude,
-              ]).toFixed(0), 10,) * 8 + 500,
+              ]).toFixed(0), 10,) <= 5 ? (350) : (
+                (parseInt(
+                  distance_btw(center, [
+                    location.latitude,
+                    location.longitude,
+                  ]).toFixed(0), 10,) - 5) * 50 + 350
+              ),
         }));
         setMobilCenterLocation(locations);
       })

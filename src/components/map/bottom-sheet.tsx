@@ -43,28 +43,26 @@ export default function BottomSheet({
     error,
 }: BottomSheetProps) {
     const sheetContentRef = useRef<HTMLDivElement>(null);
-    const [forceRerender, setForceRerender] = useState<boolean>(false);
+    const [forceRerender, setForceRerender] = useState<boolean>(true);
 
     useEffect(() => {
-        const handleScroll = () => {
-            if (sheetContentRef.current) {
-                const scrollTop = sheetContentRef.current.scrollTop;
-                if (scrollTop > 15) {
-                    sheetContentRef.current.classList.add('h-screen');
-                } else {
-                    sheetContentRef.current.classList.remove('h-screen');
-                }
+        console.log('forceRerender', forceRerender);
+        const handleScroll = (e: any) => {
+            if (e.target.scrollTop > 20) {
+                setForceRerender(true);
+            }
+            else {
+                setForceRerender(false);
             }
         };
 
-        const sheetContent = sheetContentRef.current;
-        if (sheetContent) {
-            sheetContent.addEventListener('scroll', handleScroll);
+        if (sheetContentRef.current) {
+            sheetContentRef.current.addEventListener('scroll', handleScroll);
         }
 
         return () => {
-            if (sheetContent) {
-                sheetContent.removeEventListener('scroll', handleScroll);
+            if (sheetContentRef.current) {
+                sheetContentRef.current.removeEventListener('scroll', handleScroll);
             }
         };
     }, [forceRerender]);
@@ -97,7 +95,7 @@ export default function BottomSheet({
             <Sheet key="bottom" open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                 <SheetContent
                     side="bottom"
-                    className="h-2/3 overflow-y-scroll rounded-t-3xl transition-all duration-300"
+                    className={`h-${forceRerender ? 'screen' : '2/3'} overflow-y-scroll rounded-t-3xl transition-all duration-300`}
                     ref={sheetContentRef}
                 >
                     <SheetHeader>

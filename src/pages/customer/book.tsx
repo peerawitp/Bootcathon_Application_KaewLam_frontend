@@ -93,6 +93,7 @@ function CustomerBookPage() {
                   description="searched locations"
                   loading={loading}
                   error={error}
+                  
               />
             )
           }
