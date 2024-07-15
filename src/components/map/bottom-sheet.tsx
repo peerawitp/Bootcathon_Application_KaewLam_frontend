@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import {
     Sheet,
     SheetContent,
@@ -42,34 +42,9 @@ export default function BottomSheet({
     loading,
     error,
 }: BottomSheetProps) {
-    const sheetContentRef = useRef<HTMLDivElement>(null);
-    const [forceRerender, setForceRerender] = useState<boolean>(true);
 
-    useEffect(() => {
-        console.log('forceRerender', forceRerender);
-        const handleScroll = (e: any) => {
-            if (e.target.scrollTop > 20) {
-                setForceRerender(true);
-            }
-            else {
-                setForceRerender(false);
-            }
-        };
-
-        if (sheetContentRef.current) {
-            sheetContentRef.current.addEventListener('scroll', handleScroll);
-        }
-
-        return () => {
-            if (sheetContentRef.current) {
-                sheetContentRef.current.removeEventListener('scroll', handleScroll);
-            }
-        };
-    }, [forceRerender]);
-
-    useEffect(() => {
-        setForceRerender(prev => !prev);
-    }, [isSheetOpen]);
+    const [scrollY, setScrollY] = useState(0);
+    const contentHeight = scrollY > 20 ? 'h-screen' : 'h-2/3';
 
     const renderContent = () => {
         if (loading) {
@@ -95,8 +70,8 @@ export default function BottomSheet({
             <Sheet key="bottom" open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                 <SheetContent
                     side="bottom"
-                    className={`h-${forceRerender ? 'screen' : '2/3'} overflow-y-scroll rounded-t-3xl transition-all duration-300`}
-                    ref={sheetContentRef}
+                    className={`overflow-y-scroll rounded-t-3xl transition-all duration-300 ${contentHeight}`}
+                    onScroll={(e) => setScrollY(e.currentTarget.scrollTop)}
                 >
                     <SheetHeader>
                         <SheetTitle>{title}</SheetTitle>
