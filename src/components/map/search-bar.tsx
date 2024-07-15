@@ -5,11 +5,12 @@ import { Modal } from '@/components/map/modal';
 import { fetchData } from '@/lib/map/fetch-data';
 
 interface SearchBarProps {
+  value: number;
+
   setLoading: (value: boolean) => void;
   setError: (value: string | null) => void;
   setMapData: (value: any[]) => void;
   setIsSheetOpen: (value: boolean) => void;
-  value: number;
   setValue: (value: number) => void;
   setIsMobileCenter: (value: boolean) => void;
 }
@@ -46,6 +47,12 @@ export default function SearchBar({
     setIsSheetOpen(true);
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSubmit();
+    }
+  }
+
   useEffect(() => {
     handleFetchData();
   }, []);
@@ -62,6 +69,7 @@ export default function SearchBar({
         className="flex-1 text-gray-900 dark:text-white bg-transparent border-none focus:ring-0 rounded-lg"
         value={searchTerm}
         onChange={handleChange}
+        onKeyDown={handleKeyDown}
       />
       <Button className='border-2' onClick={() => {
         setIsMobileCenter(true);
