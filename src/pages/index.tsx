@@ -32,23 +32,25 @@ function IndexPage() {
     );
   }
 
-  return (
-    <>
-      <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8">
-          {/* <div>
+  if (status == "inited") {
+    return (
+      <>
+        <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-md w-full space-y-8">
+            {/* <div>
             <img src={profile.pictureUrl} />
             <p>{profile.userId}</p>
             <p>{JSON.stringify(liffObject)}</p>
             <p>{idToken}</p>
           </div> */}
-          <h1 className="text-center text-lg text-red-800">
-            Please use in LINE Platform!
-          </h1>
+            <h1 className="text-center text-lg text-red-800">
+              Please use in LINE Platform!
+            </h1>
+          </div>
         </div>
-      </div>
-    </>
-  );
+      </>
+    );
+  }
 }
 
 export default IndexPage;

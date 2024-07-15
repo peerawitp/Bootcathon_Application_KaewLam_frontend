@@ -7,6 +7,8 @@ import CustomerBookPage from "@/pages/customer/book";
 
 import { useLine } from "@/hooks/useLine";
 import LoadingCarAnimation from "@/assets/lotties/loading_car.json";
+import ComfirmOrderPage from "@/pages/customer/confirm";
+import ReviewPage from "@/pages/customer/review";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { liffObject, status } = useLine();
@@ -38,7 +40,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 export const Router = () => {
   return (
     <BrowserRouter>
-      <Suspense>
+      <Suspense fallback={<div>Loading...</div>}>
         <Routes>
           <Route path="/" element={<IndexPage />} />
           <Route
@@ -46,6 +48,22 @@ export const Router = () => {
             element={
               <ProtectedRoute>
                 <CustomerBookPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/customer/confirm"
+            element={
+              <ProtectedRoute>
+                <ComfirmOrderPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/customer/review"
+            element={
+              <ProtectedRoute>
+                <ReviewPage />
               </ProtectedRoute>
             }
           />

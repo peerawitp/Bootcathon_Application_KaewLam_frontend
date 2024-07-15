@@ -4,11 +4,13 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
+
 const CustomerLayout = ({ children }: LayoutProps) => {
   return (
     <>
-      <div>Customer Layout</div>
+      <div className="noto-sans-thai">
       {children}
+      </div>
     </>
   );
 };
