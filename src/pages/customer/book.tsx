@@ -1,5 +1,6 @@
 import apiInstance from "@/api/instance";
 import CustomerLayout from "@/components/layouts/CustomerLayout";
+import Car from "@/components/booking/SelecCar";
 
 import { useLine } from "@/hooks/useLine";
 import { useLineInfo } from "@/hooks/useLineInfo";
@@ -18,10 +19,7 @@ function CustomerBookPage() {
 
   return (
     <CustomerLayout>
-      <div>
-        <h1>Customer Book Page</h1>
-        <p>{idToken}</p>
-      </div>
+        <Car/>
     </CustomerLayout>
   );
 }
