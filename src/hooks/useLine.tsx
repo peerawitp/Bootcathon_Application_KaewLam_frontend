@@ -28,6 +28,8 @@ export const useLine = () => {
           setStatus("inited");
           const idToken = liff.getIDToken() as string;
           setIdToken(idToken);
+        } else {
+          setStatus("signin");
         }
       })
       .catch((err: any) => {
