@@ -11,6 +11,7 @@ interface SearchBarProps {
   setIsSheetOpen: (value: boolean) => void;
   value: number;
   setValue: (value: number) => void;
+  setIsMobileCenter: (value: boolean) => void;
 }
 
 export default function SearchBar({
@@ -20,6 +21,7 @@ export default function SearchBar({
   setIsSheetOpen,
   value,
   setValue,
+  setIsMobileCenter
 }: SearchBarProps) {
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -56,6 +58,7 @@ export default function SearchBar({
   };
 
   const handleSubmit = () => {
+    setIsMobileCenter(false);
     fetchData();
     setIsSheetOpen(true);
   }
@@ -77,7 +80,10 @@ export default function SearchBar({
         value={searchTerm}
         onChange={handleChange}
       />
-      <Button className='border-2' onClick={() => setModal(true)}>Range</Button>
+      <Button className='border-2' onClick={() => {
+        setIsMobileCenter(true);
+        setModal(true)
+      }}>Range</Button>
       <Modal modal={modal} setModal={setModal} value={value} setValue={setValue} setIsSheetOpen={setIsSheetOpen} />
     </div>
   );

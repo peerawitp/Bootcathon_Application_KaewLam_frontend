@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { apiInstance } from '@/api/instance';
+import { Button } from './ui/button';
 
 const marker_user_icon = new L.Icon({
   iconUrl: '/marker-user.svg',
@@ -23,6 +24,9 @@ interface MapFrameProps {
   isSheetOpen: boolean;
   setIsSheetOpen: (value: boolean) => void;
   mapData: any[];
+  centerLocation: any[];
+  setCenterLocation: (value: any[]) => void;
+  setSeleted: (value: any) => void;
 }
 
 const MapUpdater: React.FC<{ mapCenter: [number, number]; center: [number, number]; }> = ({ mapCenter, center }) => {
@@ -64,9 +68,19 @@ const MapFrame: React.FC<MapFrameProps> = ({
   center,
   zoom,
   popUpLabel,
+  centerLocation,
+  setCenterLocation,
+  setSeleted
 }) => {
   const [mapCenter, setMapCenter] = useState(center);
-  const [centerLocation, setCenterLocation] = useState<any[]>([]);
+
+  const mockCenterLocations: any[] = [
+    { place_id: 0, name: "Center 1", latitude: 13.9237254, longitude: 100.6483500 },
+    { place_id: 1, name: "Center 2", latitude: 13.9237254, longitude: 100.9483500 },
+    { place_id: 2, name: "Center 3", latitude: 13.9997254, longitude: 100.8483500 },
+    { place_id: 3, name: "Center 4", latitude: 13.9237254, longitude: 100.5483500 },
+    { place_id: 4, name: "Center 5", latitude: 13.9237254, longitude: 100.7483500 },
+  ];
 
   useEffect(() => {
     setMapCenter(center);
@@ -81,10 +95,17 @@ const MapFrame: React.FC<MapFrameProps> = ({
       const locations = res.data.map((location: any) => ({
         ...location,
         distance: haversineDistance(center, [location.latitude, location.longitude]),
+        cost: (parseInt(haversineDistance(center, [location.latitude, location.longitude]).toFixed(0), 10) * 8) + 500,
       }));
       setCenterLocation(locations);
     })
     .catch((err) => {
+      const locations = mockCenterLocations.map((location) => ({
+        ...location,
+        distance: haversineDistance(center, [location.latitude, location.longitude]),
+        cost: (parseInt(haversineDistance(center, [location.latitude, location.longitude]).toFixed(0), 10) * 8) + 500,
+      }));
+      setCenterLocation(locations);
       console.error("Failed to fetch center locations:", err);
     });
   }, [center]);
@@ -119,6 +140,7 @@ const MapFrame: React.FC<MapFrameProps> = ({
           <Popup>
             {location.name}
             <div className='text-blue-500'>Distance: {location.distance.toFixed(2)} km</div>
+            <Button onClick={() => setSeleted(location)} className='w-full mt-2'>Select</Button>
           </Popup>
         </Marker>
       ))}
