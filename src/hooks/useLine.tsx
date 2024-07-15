@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import liff from "@line/liff";
 
 import { useLineStore } from "@/stores/lineStore";
+import { isTokenExpired } from "@/lib/jwt";
 
 export type Status = "loading" | "signin" | "inited";
 
@@ -28,6 +29,12 @@ export const useLine = () => {
           setStatus("inited");
           const idToken = liff.getIDToken() as string;
           setIdToken(idToken);
+
+          const isExpired = isTokenExpired(idToken);
+          console.log("isExpired", isExpired);
+          if (isExpired) {
+            liff.logout();
+          }
         } else {
           setStatus("signin");
         }
