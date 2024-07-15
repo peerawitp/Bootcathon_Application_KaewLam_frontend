@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
-import { mapApiInstance } from '@/api/instance';
 import { Button } from "@/components/ui/button"
-import { Modal } from '@/components/modal';
+import { Modal } from '@/components/map/modal';
+import { fetchData } from '@/lib/map/fetch-data';
 
 interface SearchBarProps {
   setLoading: (value: boolean) => void;
@@ -27,44 +27,27 @@ export default function SearchBar({
   const [searchTerm, setSearchTerm] = useState('');
   const [modal, setModal] = useState(false);
 
-  const fetchData = async () => {
-    if (!searchTerm) return;
-    setLoading(true);
-    setError(null);
-    
-    try {
-      const res = await mapApiInstance.get("/search.php", {
-        params: {
-          q: searchTerm,
-          format: 'jsonv2',
-        },
-      });
-      if (Array.isArray(res.data)) {
-        setMapData(res.data);
-      } else {
-        setError("Unexpected response format");
-        console.error("Expected an array but got:", res.data);
-      }
-    } catch (err) {
-      setError("Failed to fetch map data");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
 
+  const handleFetchData = () => {
+    fetchData({
+      searchTerm,
+      setLoading,
+      setError,
+      setMapData,
+    });
+  }
+
   const handleSubmit = () => {
     setIsMobileCenter(false);
-    fetchData();
+    handleFetchData();
     setIsSheetOpen(true);
   }
 
   useEffect(() => {
-    fetchData();
+    handleFetchData();
   }, []);
 
   return (

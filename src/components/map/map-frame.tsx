@@ -3,7 +3,8 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { apiInstance } from "@/api/instance";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
+import { distance_btw } from "@/lib/map/distance-btw";
 
 const marker_user_icon = new L.Icon({
   iconUrl: "/marker-user.svg",
@@ -20,12 +21,13 @@ interface MapFrameProps {
   center: [number, number];
   zoom: number;
   popUpLabel?: string;
-  setLocation: (value: any) => void;
   isSheetOpen: boolean;
-  setIsSheetOpen: (value: boolean) => void;
   mapData: any[];
-  centerLocation: any[];
-  setCenterLocation: (value: any[]) => void;
+  mobilCenterLocation: any[];
+
+  setLocation: (value: any) => void;
+  setIsSheetOpen: (value: boolean) => void;
+  setMobilCenterLocation: (value: any[]) => void;
   setSeleted: (value: any) => void;
 }
 
@@ -46,38 +48,12 @@ const MapUpdater: React.FC<{
   return null;
 };
 
-const haversineDistance = (
-  coords1: [number, number],
-  coords2: [number, number],
-) => {
-  const toRad = (value: number) => (value * Math.PI) / 180;
-
-  const lat1 = coords1[0];
-  const lon1 = coords1[1];
-  const lat2 = coords2[0];
-  const lon2 = coords2[1];
-
-  const R = 6371;
-  const dLat = toRad(lat2 - lat1);
-  const dLon = toRad(lon2 - lon1);
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(toRad(lat1)) *
-      Math.cos(toRad(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  const distance = R * c;
-
-  return distance; // distance in kilometers
-};
-
 const MapFrame: React.FC<MapFrameProps> = ({
   center,
   zoom,
   popUpLabel,
-  centerLocation,
-  setCenterLocation,
+  mobilCenterLocation,
+  setMobilCenterLocation,
   setSeleted,
 }) => {
   const [mapCenter, setMapCenter] = useState(center);
@@ -85,9 +61,7 @@ const MapFrame: React.FC<MapFrameProps> = ({
   useEffect(() => {
     setMapCenter(center);
     setSeleted(null);
-  }, [center]);
 
-  useEffect(() => {
     apiInstance({
       method: "GET",
       url: "/center",
@@ -95,42 +69,20 @@ const MapFrame: React.FC<MapFrameProps> = ({
       .then((res) => {
         const locations = res.data.map((location: any) => ({
           ...location,
-          distance: haversineDistance(center, [
+          distance: distance_btw(center, [
             location.latitude,
             location.longitude,
           ]),
           cost:
             parseInt(
-              haversineDistance(center, [
+              distance_btw(center, [
                 location.latitude,
                 location.longitude,
-              ]).toFixed(0),
-              10,
-            ) *
-              8 +
-            500,
+              ]).toFixed(0), 10,) * 8 + 500,
         }));
-        setCenterLocation(locations);
+        setMobilCenterLocation(locations);
       })
       .catch((err) => {
-        const locations = centerLocation.map((location) => ({
-          ...location,
-          distance: haversineDistance(center, [
-            location.latitude,
-            location.longitude,
-          ]),
-          cost:
-            parseInt(
-              haversineDistance(center, [
-                location.latitude,
-                location.longitude,
-              ]).toFixed(0),
-              10,
-            ) *
-              8 +
-            500,
-        }));
-        setCenterLocation(locations);
         console.error("Failed to fetch center locations:", err);
       });
   }, [center]);
@@ -153,12 +105,12 @@ const MapFrame: React.FC<MapFrameProps> = ({
       <Marker position={center} icon={marker_user_icon}>
         <Popup>
           {popUpLabel}
-          <div className="text-green-500">
+          <div className="text-green-600">
             {center[0]} {center[1]}
           </div>
         </Popup>
       </Marker>
-      {centerLocation.map((location, index) => (
+      {mobilCenterLocation.map((location, index) => (
         <Marker
           key={index}
           position={[location.latitude, location.longitude]}
@@ -166,7 +118,7 @@ const MapFrame: React.FC<MapFrameProps> = ({
         >
           <Popup>
             {location.name}
-            <div className="text-blue-500">
+            <div className="text-blue-600">
               Distance: {location.distance.toFixed(2)} km
             </div>
             <Button
