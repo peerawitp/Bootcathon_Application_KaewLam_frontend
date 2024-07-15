@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import {
     Sheet,
     SheetContent,
@@ -43,8 +43,16 @@ export default function BottomSheet({
     error,
 }: BottomSheetProps) {
 
-    const [scrollY, setScrollY] = useState(0);
-    const contentHeight = scrollY > 20 ? 'h-screen' : 'h-2/3';
+    const [isOverflow, setIsOverflow] = useState(false);
+    const contentHeight = isOverflow ? 'h-screen' : 'h-2/3';
+
+    const handleScroll = (e: any) => {
+        setIsOverflow(e.target.scrollTop > 1);
+      };
+
+    useEffect(() => {
+        setIsOverflow(false);
+    }, [isSheetOpen]);
 
     const renderContent = () => {
         if (loading) {
@@ -71,7 +79,7 @@ export default function BottomSheet({
                 <SheetContent
                     side="bottom"
                     className={`overflow-y-scroll rounded-t-3xl transition-all duration-300 ${contentHeight}`}
-                    onScroll={(e) => setScrollY(e.currentTarget.scrollTop)}
+                    onScroll={handleScroll}
                 >
                     <SheetHeader>
                         <SheetTitle>{title}</SheetTitle>
