@@ -1,4 +1,4 @@
-import { useEffect, useRef, ReactNode } from 'react';
+import { useEffect, useRef, useState, ReactNode } from 'react';
 import {
     Sheet,
     SheetContent,
@@ -16,56 +16,62 @@ const defaultOptions = {
     rendererSettings: {
       preserveAspectRatio: "xMidYMid slice",
     },
-  };
+};
 
 interface BottomSheetProps {
     isSheetOpen: boolean;
-    setIsSheetOpen: (value: boolean) => void;
-    setLocation: (value: any) => void;
     listData: any[];
-    renderItem: (data: any, setLocation: (value: any) => void, setIsSheetOpen: (value: boolean) => void) => ReactNode;
     title: string;
     description: string;
     loading?: boolean;
     error?: string | null;
+
+    setIsSheetOpen: (value: boolean) => void;
+    setLocationPoint: (value: any) => void;
+    renderItem: (data: any, setLocationPoint: (value: any) => void, setIsSheetOpen: (value: boolean) => void) => ReactNode;
 }
 
 export default function BottomSheet({
     isSheetOpen,
     setIsSheetOpen,
-    setLocation,
+    setLocationPoint,
     listData,
     renderItem,
     title,
     description,
-    loading = false,
-    error = null,
+    loading,
+    error,
 }: BottomSheetProps) {
     const sheetContentRef = useRef<HTMLDivElement>(null);
+    const [forceRerender, setForceRerender] = useState<boolean>(false);
 
     useEffect(() => {
         const handleScroll = () => {
             if (sheetContentRef.current) {
                 const scrollTop = sheetContentRef.current.scrollTop;
-                if (scrollTop > 10) {
+                if (scrollTop > 15) {
                     sheetContentRef.current.classList.add('h-screen');
                 } else {
                     sheetContentRef.current.classList.remove('h-screen');
                 }
             }
         };
-    
+
         const sheetContent = sheetContentRef.current;
         if (sheetContent) {
             sheetContent.addEventListener('scroll', handleScroll);
         }
-    
+
         return () => {
             if (sheetContent) {
                 sheetContent.removeEventListener('scroll', handleScroll);
             }
         };
-    }, []);
+    }, [forceRerender]);
+
+    useEffect(() => {
+        setForceRerender(prev => !prev);
+    }, [isSheetOpen]);
 
     const renderContent = () => {
         if (loading) {
@@ -75,13 +81,12 @@ export default function BottomSheet({
                 </div>
             )
         }
-
         if (error) {
             return <p>Error: {error}</p>;
         }
 
         if (listData.length > 0) {
-            return listData.map((data) => renderItem(data, setLocation, setIsSheetOpen));
+            return listData.map((data) => renderItem(data, setLocationPoint, setIsSheetOpen));
         } else {
             return <p>No data available</p>;
         }

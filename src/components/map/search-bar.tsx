@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
-import { mapApiInstance } from '@/api/instance';
 import { Button } from "@/components/ui/button"
-import { Modal } from '@/components/modal';
+import { Modal } from '@/components/map/modal';
+import { fetchData } from '@/lib/map/fetch-data';
 
 interface SearchBarProps {
   setLoading: (value: boolean) => void;
@@ -11,6 +11,7 @@ interface SearchBarProps {
   setIsSheetOpen: (value: boolean) => void;
   value: number;
   setValue: (value: number) => void;
+  setIsMobileCenter: (value: boolean) => void;
 }
 
 export default function SearchBar({
@@ -20,48 +21,33 @@ export default function SearchBar({
   setIsSheetOpen,
   value,
   setValue,
+  setIsMobileCenter
 }: SearchBarProps) {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [modal, setModal] = useState(false);
 
-  const fetchData = async () => {
-    if (!searchTerm) return;
-    setLoading(true);
-    setError(null);
-    
-    try {
-      const res = await mapApiInstance.get("/search.php", {
-        params: {
-          q: searchTerm,
-          format: 'jsonv2',
-        },
-      });
-      if (Array.isArray(res.data)) {
-        setMapData(res.data);
-      } else {
-        setError("Unexpected response format");
-        console.error("Expected an array but got:", res.data);
-      }
-    } catch (err) {
-      setError("Failed to fetch map data");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
 
+  const handleFetchData = () => {
+    fetchData({
+      searchTerm,
+      setLoading,
+      setError,
+      setMapData,
+    });
+  }
+
   const handleSubmit = () => {
-    fetchData();
+    setIsMobileCenter(false);
+    handleFetchData();
     setIsSheetOpen(true);
   }
 
   useEffect(() => {
-    fetchData();
+    handleFetchData();
   }, []);
 
   return (
@@ -77,7 +63,10 @@ export default function SearchBar({
         value={searchTerm}
         onChange={handleChange}
       />
-      <Button className='border-2' onClick={() => setModal(true)}>Range</Button>
+      <Button className='border-2' onClick={() => {
+        setIsMobileCenter(true);
+        setModal(true)
+      }}>Range</Button>
       <Modal modal={modal} setModal={setModal} value={value} setValue={setValue} setIsSheetOpen={setIsSheetOpen} />
     </div>
   );
