@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import StatusBar from "@/components/comfirm/stage-bar";
 import useWebSocket from "react-use-websocket";
+import CustomerLayout from "@/components/layouts/CustomerLayout";
 
 const data = {
   orderId: "1",
@@ -50,7 +51,7 @@ export default function ComfirmOrderPage() {
   }
 
   return (
-    <>
+    <CustomerLayout>
       <div className="flex-col flex ">
         <div className="lg:w-2/5 gap-3 flex flex-col items-center h-screen">
           <img src={pic} alt="" />
@@ -75,6 +76,6 @@ export default function ComfirmOrderPage() {
           )}
         </div>
       </div>
-    </>
+    </CustomerLayout>
   );
 }
