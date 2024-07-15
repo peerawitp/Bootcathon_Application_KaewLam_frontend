@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 function CustomerBookPage() {
   const [location, setLocation] = useState<any>([0, 0]);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-
   const [mapData, setMapData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -17,7 +16,7 @@ function CustomerBookPage() {
   const [isMobilCenter, setIsMobileCenter] = useState(false);
   const [centerLocation, setCenterLocation] = useState<any[]>([]);
 
-  const renderMapItem = (data: MapItemData, setLocation: (value: [number, number]) => void, setIsSheetOpen: (value: boolean) => void) => (
+  const renderMapItem = (data: MapItemData) => (
     <div
         key={data.place_id}
         className="mb-3 hover:cursor-pointer hover:text-blue-600 transition-transform duration-300 ease-in-out bg-slate-100 rounded-xl p-5 flex flex-cols-2"
@@ -45,7 +44,6 @@ function CustomerBookPage() {
             key={data.place_id}
             className="mb-3 hover:cursor-pointer hover:text-blue-600 transition-transform duration-300 ease-in-out bg-slate-100 rounded-xl p-5 flex flex-cols-2"
             onClick={() => {
-                
                 setIsSheetOpen(false);
                 setIsMobileCenter(false);
                 setSeleted(data);
