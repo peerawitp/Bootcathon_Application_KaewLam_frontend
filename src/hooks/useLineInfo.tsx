@@ -27,13 +27,13 @@ export const useLineInfo = ({ liff, status }: UseLineInfoProps) => {
         setUserId(profile.userId);
         setDisplayName(profile.displayName);
         setPictureUrl(profile.pictureUrl);
+
+        const idToken = liff?.getIDToken();
+        setIdToken(idToken);
       })
       .catch((err: any) => {
         console.error({ err });
       });
-
-    const idToken = liff?.getIDToken();
-    setIdToken(idToken);
   }, [liff, status, setUserId, setDisplayName, setPictureUrl, setIdToken]);
 
   const version = liff?.getVersion();

@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
-import { apiInstance } from '@/api/instance';
-import { Button } from './ui/button';
+import React, { useEffect, useState } from "react";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+import { apiInstance } from "@/api/instance";
+import { Button } from "./ui/button";
 
 const marker_user_icon = new L.Icon({
-  iconUrl: '/marker-user.svg',
+  iconUrl: "/marker-user.svg",
   iconSize: [40, 40],
   iconAnchor: [16, 32],
 });
 const marker_center_icon = new L.Icon({
-  iconUrl: '/marker-center.svg',
+  iconUrl: "/marker-center.svg",
   iconSize: [40, 40],
   iconAnchor: [16, 32],
 });
@@ -29,7 +29,10 @@ interface MapFrameProps {
   setSeleted: (value: any) => void;
 }
 
-const MapUpdater: React.FC<{ mapCenter: [number, number]; center: [number, number]; }> = ({ mapCenter, center }) => {
+const MapUpdater: React.FC<{
+  mapCenter: [number, number];
+  center: [number, number];
+}> = ({ mapCenter, center }) => {
   const map = useMap();
 
   useEffect(() => {
@@ -43,7 +46,10 @@ const MapUpdater: React.FC<{ mapCenter: [number, number]; center: [number, numbe
   return null;
 };
 
-const haversineDistance = (coords1: [number, number], coords2: [number, number]) => {
+const haversineDistance = (
+  coords1: [number, number],
+  coords2: [number, number],
+) => {
   const toRad = (value: number) => (value * Math.PI) / 180;
 
   const lat1 = coords1[0];
@@ -56,8 +62,10 @@ const haversineDistance = (coords1: [number, number], coords2: [number, number])
   const dLon = toRad(lon2 - lon1);
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    Math.cos(toRad(lat1)) *
+      Math.cos(toRad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const distance = R * c;
 
@@ -70,17 +78,9 @@ const MapFrame: React.FC<MapFrameProps> = ({
   popUpLabel,
   centerLocation,
   setCenterLocation,
-  setSeleted
+  setSeleted,
 }) => {
   const [mapCenter, setMapCenter] = useState(center);
-
-  const mockCenterLocations: any[] = [
-    { place_id: 0, name: "Center 1", latitude: 13.9237254, longitude: 100.6483500 },
-    { place_id: 1, name: "Center 2", latitude: 13.9237254, longitude: 100.9483500 },
-    { place_id: 2, name: "Center 3", latitude: 13.9997254, longitude: 100.8483500 },
-    { place_id: 3, name: "Center 4", latitude: 13.9237254, longitude: 100.5483500 },
-    { place_id: 4, name: "Center 5", latitude: 13.9237254, longitude: 100.7483500 },
-  ];
 
   useEffect(() => {
     setMapCenter(center);
@@ -91,23 +91,47 @@ const MapFrame: React.FC<MapFrameProps> = ({
       method: "GET",
       url: "/center",
     })
-    .then((res) => {
-      const locations = res.data.map((location: any) => ({
-        ...location,
-        distance: haversineDistance(center, [location.latitude, location.longitude]),
-        cost: (parseInt(haversineDistance(center, [location.latitude, location.longitude]).toFixed(0), 10) * 8) + 500,
-      }));
-      setCenterLocation(locations);
-    })
-    .catch((err) => {
-      const locations = mockCenterLocations.map((location) => ({
-        ...location,
-        distance: haversineDistance(center, [location.latitude, location.longitude]),
-        cost: (parseInt(haversineDistance(center, [location.latitude, location.longitude]).toFixed(0), 10) * 8) + 500,
-      }));
-      setCenterLocation(locations);
-      console.error("Failed to fetch center locations:", err);
-    });
+      .then((res) => {
+        const locations = res.data.map((location: any) => ({
+          ...location,
+          distance: haversineDistance(center, [
+            location.latitude,
+            location.longitude,
+          ]),
+          cost:
+            parseInt(
+              haversineDistance(center, [
+                location.latitude,
+                location.longitude,
+              ]).toFixed(0),
+              10,
+            ) *
+              8 +
+            500,
+        }));
+        setCenterLocation(locations);
+      })
+      .catch((err) => {
+        const locations = centerLocation.map((location) => ({
+          ...location,
+          distance: haversineDistance(center, [
+            location.latitude,
+            location.longitude,
+          ]),
+          cost:
+            parseInt(
+              haversineDistance(center, [
+                location.latitude,
+                location.longitude,
+              ]).toFixed(0),
+              10,
+            ) *
+              8 +
+            500,
+        }));
+        setCenterLocation(locations);
+        console.error("Failed to fetch center locations:", err);
+      });
   }, [center]);
 
   return (
@@ -128,7 +152,9 @@ const MapFrame: React.FC<MapFrameProps> = ({
       <Marker position={center} icon={marker_user_icon}>
         <Popup>
           {popUpLabel}
-          <div className="text-green-500">{center[0]} {center[1]}</div>
+          <div className="text-green-500">
+            {center[0]} {center[1]}
+          </div>
         </Popup>
       </Marker>
       {centerLocation.map((location, index) => (
@@ -139,17 +165,21 @@ const MapFrame: React.FC<MapFrameProps> = ({
         >
           <Popup>
             {location.name}
-            <div className='text-blue-500'>Distance: {location.distance.toFixed(2)} km</div>
-            <Button onClick={() => setSeleted(location)} className='w-full mt-2'>Select</Button>
+            <div className="text-blue-500">
+              Distance: {location.distance.toFixed(2)} km
+            </div>
+            <Button
+              onClick={() => setSeleted(location)}
+              className="w-full mt-2"
+            >
+              Select
+            </Button>
           </Popup>
         </Marker>
       ))}
       <MapUpdater mapCenter={mapCenter} center={center} />
-      
     </MapContainer>
   );
 };
-
-
 
 export default MapFrame;

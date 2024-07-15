@@ -40,7 +40,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 export const Router = () => {
   return (
     <BrowserRouter>
-      <Suspense>
+      <Suspense fallback={<div>Loading...</div>}>
         <Routes>
           <Route path="/" element={<IndexPage />} />
           <Route
@@ -51,15 +51,15 @@ export const Router = () => {
               </ProtectedRoute>
             }
           />
-           <Route
-            path="/customer/comfirm"
+          <Route
+            path="/customer/confirm"
             element={
               <ProtectedRoute>
                 <ComfirmOrderPage />
               </ProtectedRoute>
             }
           />
-           <Route
+          <Route
             path="/customer/review"
             element={
               <ProtectedRoute>
