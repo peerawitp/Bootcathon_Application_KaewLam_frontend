@@ -52,7 +52,7 @@ export default function ComfirmOrderPage() {
 
   return (
     <CustomerLayout>
-      <div className="flex-col flex ">
+      <div className="flex-col flex w-screen justify-center items-center">
         <div className="lg:w-2/5 gap-3 flex flex-col items-center h-screen">
           <img src={pic} alt="" />
           <div className="text-start w-full px-5">
@@ -61,7 +61,7 @@ export default function ComfirmOrderPage() {
           <StatusBar status={progress} />
           <OrderDetail data={data} />
           {progress === 0 ? (
-            <Button className="bg-[#0E479F] px-10 text-lg rounded-lg" size="lg" onClick={() => setProgress(50)}>
+            <Button className="bg-[#0E479F] px-10 py-5  text-lg rounded-lg " size="lg" onClick={() => setProgress(50)}>
               ยืนยันการจอง
             </Button>
           ) : (
