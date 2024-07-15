@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import type { Liff } from "@line/liff";
 
-export type Status = "signin" | "inited";
+export type Status = "loading" | "signin" | "inited";
 
 interface LineState {
   liffObject: Liff | null;
@@ -20,7 +20,7 @@ interface LineState {
 
 export const useLineStore = create<LineState>((set) => ({
   liffObject: null,
-  status: "signin",
+  status: "loading",
   userId: "",
   displayName: "",
   pictureUrl: "",
