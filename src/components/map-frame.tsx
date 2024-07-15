@@ -84,6 +84,7 @@ const MapFrame: React.FC<MapFrameProps> = ({
 
   useEffect(() => {
     setMapCenter(center);
+    setSeleted(null);
   }, [center]);
 
   useEffect(() => {
