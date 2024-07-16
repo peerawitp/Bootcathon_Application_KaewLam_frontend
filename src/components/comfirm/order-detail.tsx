@@ -3,6 +3,7 @@ import mobil_pin from "@/assets/mobilPin.png";
 
 import { useOrderStore } from "@/stores/orderStore";
 import { currencyFormat } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
 
 interface DetailProps {
   data: {
@@ -25,6 +26,10 @@ const OrderDetail = ({ data }: DetailProps) => {
   const userAddress = useOrderStore((state) => state.userAddress);
   const selectedDateTime = useOrderStore((state) => state.selectedDateTime);
   const serviceCost = useOrderStore((state) => state.serviceCost);
+
+  if (!selectedProduct || !selectedCenter || !selectedDateTime) {
+    return <></>;
+  }
 
   return (
     <div className="m-5 ">
