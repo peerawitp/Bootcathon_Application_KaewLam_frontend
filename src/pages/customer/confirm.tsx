@@ -44,7 +44,7 @@ export default function ComfirmOrderPage() {
 
   const [progress, setProgress] = useState(0);
   const { lastMessage, readyState } = useWebSocket(
-    "wss://mobil-nodered.peerawitp.me/ws/order-status",
+    import.meta.env.VITE_NODE_RED,
   );
   useEffect(() => {
     if (readyState !== 1) {
