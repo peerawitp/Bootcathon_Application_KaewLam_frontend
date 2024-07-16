@@ -1,6 +1,8 @@
 import { formatThaiTimestamp } from "@/lib/profile/format-time";
 import { Badge } from "../ui/badge";
 import { IoChevronForwardOutline } from "react-icons/io5";
+import {  Drawer,DrawerTrigger } from "../ui/drawer";
+import HistoryDrawer from "./history";
 
 const TrackCard = ({ item }: any) => {
     const maxAddressLength = 20;
@@ -12,6 +14,8 @@ const TrackCard = ({ item }: any) => {
     };
   
     return (
+      <Drawer>
+      <DrawerTrigger> 
       <div onClick={() => console.log('go to nha sud tai')} className="flex flex-row shadow-lg w-full h-full p-3 rounded-xl gap-2 hover:cursor-pointer">
         <div className="w-3/12 flex justify-center rounded-xl h-fit">
           <img src="/fuel-icon.svg" alt="" />
@@ -32,6 +36,9 @@ const TrackCard = ({ item }: any) => {
           <IoChevronForwardOutline className="h-full w-full" />
         </div>
       </div>
+      </DrawerTrigger>
+      <HistoryDrawer />
+      </Drawer>
     );
   };
 
