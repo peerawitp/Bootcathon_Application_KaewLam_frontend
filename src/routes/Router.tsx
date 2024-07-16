@@ -9,6 +9,8 @@ import { useLine } from "@/hooks/useLine";
 import LoadingCarAnimation from "@/assets/lotties/loading_car.json";
 import ComfirmOrderPage from "@/pages/customer/confirm";
 import ReviewPage from "@/pages/customer/review";
+import OrderPage from "@/pages/customer/order";
+
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { liffObject, status } = useLine();
@@ -64,6 +66,14 @@ export const Router = () => {
             element={
               <ProtectedRoute>
                 <ReviewPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/customer/order"
+            element={
+              <ProtectedRoute>
+                <OrderPage />
               </ProtectedRoute>
             }
           />
