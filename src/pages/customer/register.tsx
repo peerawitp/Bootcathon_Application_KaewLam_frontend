@@ -19,7 +19,7 @@ export default function RegisterPage() {
 
   return (
     <CustomerLayout>
-      <div className="flex-col flex w-screen justify-center items-center w-full ">
+      <div className="flex-col flex w-screen justify-center items-center ">
         <div className=" flex flex-col h-screen lg:w-2/5 items-center justify-center gap-5 p-7">
           <img src={logo} alt="logo" className="w-30 mx-10" width={200} />
           <p className=" font-semibold text-lg text-[#0E479F] ">
@@ -73,7 +73,7 @@ export default function RegisterPage() {
                 
               disabled = {!check}
               className={`bg-[#0E479F] rounded-2xl  px-12 `}
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/customer/add-car")}
             >
               ลงทะเบียน
             </ Button>
