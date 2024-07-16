@@ -17,7 +17,7 @@ export interface Product {
   description: string;
   oilViscosity: string;
   liquidVolume: number;
-  price: number;
+  priceRange: number[];
   createdAt: string;
   updatedAt: string;
 }
@@ -46,10 +46,16 @@ interface OrderStore {
   setUserCars: (cars: Car[]) => void;
   oilProducts: Product[];
   setOilProducts: (products: Product[]) => void;
-  userLocation: string | null;
-  setUserLocation: (location: string | null) => void;
+  userLocation: [number, number];
+  setUserLocation: (location: [number, number]) => void;
+  userAddress: string | null;
+  setUserAddress: (address: string | null) => void;
   recommendedOil: Product[];
   setRecommendedOil: (oil: Product[]) => void;
+  selectedDateTime: Date | null;
+  setSelectedDateTime: (dateTime: Date | null) => void;
+  serviceCost: number;
+  setServiceCost: (cost: number) => void;
 }
 
 export const useOrderStore = create<OrderStore>((set) => ({
@@ -63,10 +69,16 @@ export const useOrderStore = create<OrderStore>((set) => ({
   setUserCars: (cars) => set({ userCars: cars }),
   oilProducts: [],
   setOilProducts: (products) => set({ oilProducts: products }),
-  userLocation: null,
+  userLocation: [0.0, 0.0],
   setUserLocation: (location) => set({ userLocation: location }),
+  userAddress: null,
+  setUserAddress: (address) => set({ userAddress: address }),
   recommendedOil: [],
   setRecommendedOil: (oil) => set({ recommendedOil: oil }),
+  selectedDateTime: null,
+  setSelectedDateTime: (dateTime) => set({ selectedDateTime: dateTime }),
+  serviceCost: 0,
+  setServiceCost: (cost) => set({ serviceCost: cost }),
 }));
 
 export const fetchUserCars = () => {

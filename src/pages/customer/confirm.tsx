@@ -6,6 +6,8 @@ import StatusBar from "@/components/comfirm/stage-bar";
 import useWebSocket from "react-use-websocket";
 import CustomerLayout from "@/components/layouts/CustomerLayout";
 
+import { useOrderStore } from "@/stores/orderStore";
+
 const data = {
   orderId: "1",
   addresCustomer:
@@ -23,11 +25,10 @@ const data = {
   total: "~ 1550-1650 บ.",
 };
 
-
 export default function ComfirmOrderPage() {
   const [progress, setProgress] = useState(0);
   const { lastMessage, readyState } = useWebSocket(
-    "wss://mobil-nodered.peerawitp.me/ws/order-status"
+    "wss://mobil-nodered.peerawitp.me/ws/order-status",
   );
   useEffect(() => {
     if (readyState !== 1) {
@@ -61,17 +62,21 @@ export default function ComfirmOrderPage() {
           <StatusBar status={progress} />
           <OrderDetail data={data} />
           {progress === 0 ? (
-            <Button className="bg-[#0E479F] px-10 py-5  text-lg rounded-lg " size="lg" onClick={() => setProgress(50)}>
+            <Button
+              className="bg-[#0E479F] px-10 py-5  text-lg rounded-lg "
+              size="lg"
+              onClick={() => setProgress(50)}
+            >
               ยืนยันการจอง
             </Button>
           ) : (
             <div className="h-full  flex items-end justify-center my-5">
-            <Button
-              className="relative text-red-500 text-md bottom-0 font-light bg-transparent hover:bg-transparent"
-              onClick={() => setProgress(50)}
-            >
-              ยกเลิกการจอง
-            </Button>
+              <Button
+                className="relative text-red-500 text-md bottom-0 font-light bg-transparent hover:bg-transparent"
+                onClick={() => setProgress(50)}
+              >
+                ยกเลิกการจอง
+              </Button>
             </div>
           )}
         </div>

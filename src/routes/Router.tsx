@@ -13,6 +13,8 @@ import RewardPage from "@/pages/customer/rewards";
 import CouponPage from "@/pages/customer/coupon";
 import OrderPage from "@/pages/customer/order";
 import Profile from "@/pages/customer/profile";
+import RegisterPage from "@/pages/customer/register";
+import AddCarPage from "@/pages/customer/add-car";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { liffObject, status } = useLine();
@@ -100,6 +102,22 @@ export const Router = () => {
             element={
               <ProtectedRoute>
                 <Profile/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/customer/register"
+            element={
+              <ProtectedRoute>
+                <RegisterPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/customer/add-car"
+            element={
+              <ProtectedRoute>
+                <AddCarPage />
               </ProtectedRoute>
             }
           />
