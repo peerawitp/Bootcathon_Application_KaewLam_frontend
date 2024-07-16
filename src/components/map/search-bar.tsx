@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { Input } from '@/components/ui/input';
-import { Button } from "@/components/ui/button"
-import { Modal } from '@/components/map/modal';
-import { fetchData } from '@/lib/map/fetch-data';
+import { useEffect, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Modal } from "@/components/map/modal";
+import { fetchData } from "@/lib/map/fetch-data";
 
 interface SearchBarProps {
   value: number;
@@ -16,16 +16,15 @@ interface SearchBarProps {
 }
 
 export default function SearchBar({
-  setLoading, 
-  setError, 
+  setLoading,
+  setError,
   setMapData,
   setIsSheetOpen,
   value,
   setValue,
-  setIsMobileCenter
+  setIsMobileCenter,
 }: SearchBarProps) {
-
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [modal, setModal] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,19 +38,19 @@ export default function SearchBar({
       setError,
       setMapData,
     });
-  }
+  };
 
   const handleSubmit = () => {
     setIsMobileCenter(false);
     handleFetchData();
     setIsSheetOpen(true);
-  }
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleSubmit();
     }
-  }
+  };
 
   useEffect(() => {
     handleFetchData();
@@ -59,9 +58,9 @@ export default function SearchBar({
 
   return (
     <div className="flex items-center p-2 px-3 bg-white dark:bg-gray-800 rounded-2xl shadow-lg gap-3">
-      <SearchIcon 
-        className="text-gray-500 dark:text-gray-400 hover:cursor-pointer" 
-        onClick={() => handleSubmit()} 
+      <SearchIcon
+        className="text-gray-500 dark:text-gray-400 hover:cursor-pointer"
+        onClick={() => handleSubmit()}
       />
       <Input
         type="text"
@@ -71,11 +70,22 @@ export default function SearchBar({
         onChange={handleChange}
         onKeyDown={handleKeyDown}
       />
-      <Button className='border-2' onClick={() => {
-        setIsMobileCenter(true);
-        setModal(true)
-      }}>Range</Button>
-      <Modal modal={modal} setModal={setModal} value={value} setValue={setValue} setIsSheetOpen={setIsSheetOpen} />
+      <Button
+        className="border-2"
+        onClick={() => {
+          setIsMobileCenter(true);
+          setModal(true);
+        }}
+      >
+        Find Nearest
+      </Button>
+      <Modal
+        modal={modal}
+        setModal={setModal}
+        value={value}
+        setValue={setValue}
+        setIsSheetOpen={setIsSheetOpen}
+      />
     </div>
   );
 }
@@ -99,3 +109,4 @@ function SearchIcon(props: any) {
     </svg>
   );
 }
+

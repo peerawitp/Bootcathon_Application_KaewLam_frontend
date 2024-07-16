@@ -49,8 +49,10 @@ export default class Renderer {
       <div className="flex flex-col">
         <h2 className="font-bold">{data.name}</h2>
         <div>
-          <p>location: {data.display_name}</p>
-          <p>type: <span className="font-bold text-green-600">{data.type}</span></p>
+          <p>{data.display_name}</p>
+          <p>
+            type: <span className="font-bold text-green-600">{data.type}</span>
+          </p>
         </div>
       </div>
     </div>
@@ -73,8 +75,17 @@ export default class Renderer {
         <div className="flex flex-col">
           <h2 className="font-bold">{data.name}</h2>
           <div>
-            <p>distance: <span className="font-bold text-blue-600">{data.distance.toFixed(2)}</span> km</p>
-            <p>cost: <span className="font-bold text-green-600">{data.cost}</span> บาท</p>
+            <p>
+              distance:{" "}
+              <span className="font-bold text-blue-600">
+                {data.distance.toFixed(2)}
+              </span>{" "}
+              km
+            </p>
+            <p>
+              cost:{" "}
+              <span className="font-bold text-green-600">{data.cost}</span> บาท
+            </p>
           </div>
         </div>
       </div>
