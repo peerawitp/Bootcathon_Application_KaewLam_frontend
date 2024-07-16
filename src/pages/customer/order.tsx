@@ -14,9 +14,11 @@ import {
   fetchMobilCenter,
   fetchOilProducts,
   fetchRecommendedOil,
+  MobilCenter,
   useOrderStore,
 } from "@/stores/orderStore";
-import { timestampToTime } from "@/lib/utils";
+import { currencyFormat, timestampToTime } from "@/lib/utils";
+import { distance_btw } from "@/lib/map/distance-btw";
 
 const data = {
   orderId: "1",
@@ -45,6 +47,7 @@ const data = {
 
 export default function OrderPage() {
   const mockCenterId = 10;
+  const userLocation = { latitude: 13.7563, longitude: 100.5018 };
 
   const [selectedItem, setSelectedItem] = useState<{
     label: string;
@@ -57,11 +60,11 @@ export default function OrderPage() {
   const recommendedOil = useOrderStore((state) => state.recommendedOil);
   const selectedCenter = useOrderStore((state) => state.selectedCenter);
 
-  useEffect(() => {
-    fetchOilProducts();
-  }, []);
+  const [serviceCost, setServiceCost] = useState(0);
+  const [totalCost, setTotalCost] = useState<number[]>([0.0, 0.0]);
 
   useEffect(() => {
+    fetchOilProducts();
     fetchMobilCenter(mockCenterId);
   }, []);
 
@@ -77,14 +80,51 @@ export default function OrderPage() {
 
   useEffect(() => {
     console.log(selectedProduct);
+
+    if (selectedProduct) {
+      setTotalCost([
+        serviceCost + selectedProduct.priceRange[0],
+        serviceCost + selectedProduct.priceRange[1],
+      ]);
+    }
   }, [selectedProduct]);
+
+  useEffect(() => {
+    if (selectedCenter) {
+      setServiceCost(
+        parseInt(
+          distance_btw(
+            [selectedCenter.latitude, selectedCenter.longitude],
+            [userLocation.latitude, userLocation.longitude],
+          ).toFixed(0),
+          10,
+        ) <= 5
+          ? 350
+          : (parseInt(
+              distance_btw(
+                [selectedCenter.latitude, selectedCenter.longitude],
+                [userLocation.latitude, userLocation.longitude],
+              ).toFixed(0),
+              10,
+            ) -
+              5) *
+              50 +
+              350,
+      );
+    }
+  }, [selectedCenter]);
 
   const [position, setPosition] = useState("bottom");
   const [date, setDate] = useState<Date>(new Date());
 
-  function currencyFormat(num: number) {
-    return num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "1,") + " บ.";
-  }
+  const submitOrder = () => {
+    console.log({
+      selectedCar,
+      selectedProduct,
+      selectedItem,
+      date,
+    });
+  };
 
   return (
     <CustomerLayout>
@@ -142,18 +182,24 @@ export default function OrderPage() {
             <div className="w-full ">
               <div className="flex w-full px-5  justify-between items-center">
                 <p className="font-bold">ค่าบริการ:</p>
-                <p>{currencyFormat(data.service)}</p>
+                <p>{currencyFormat(serviceCost)} บ.</p>
               </div>
               <div className="flex w-full px-5  justify-between items-center mb-2">
                 <p className="font-bold  text-[#BF360C]">รวม</p>
-                <p>{data.total}</p>
+                <p>
+                  ~ {currencyFormat(totalCost[0])} -{" "}
+                  {currencyFormat(totalCost[1])} บ.
+                </p>
               </div>
             </div>
             <hr
               style={{ borderTop: "1px solid lightgrey" }}
               className=" border-gray-300 w-full h-1 py-2"
             />
-            <Button className="bg-[#0E479F] text-xl rounded-2xl my-10 px-28">
+            <Button
+              onClick={submitOrder}
+              className="bg-[#0E479F] text-xl rounded-2xl my-10 px-28"
+            >
               จอง
             </Button>
           </div>

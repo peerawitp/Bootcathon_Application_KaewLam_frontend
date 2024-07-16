@@ -11,6 +11,7 @@ import {
 import oil1 from "@/assets/oil1.png";
 import { Button } from "../ui/button";
 import { Product } from "@/stores/orderStore";
+import { currencyFormat } from "@/lib/utils";
 
 interface OilInfoProps {
   product: Product[];
@@ -26,7 +27,7 @@ export default function OilInfo({
   return (
     <div className="w-full flex flex-col gap-2">
       <p className="font-bold">น้ำมันเครื่องที่แนะนำ</p>
-      {product.map((item, key) => (
+      {product.map((item) => (
         <div
           key={item.id}
           onClick={() => setSelect(item)}
@@ -63,11 +64,13 @@ export default function OilInfo({
                 </DialogFooter>
               </DialogContent>
             </Dialog>
-            <p className="font-bold">{item.price}</p>
+            <p className="font-bold">
+              ~ {currencyFormat(item.priceRange[0])} -{" "}
+              {currencyFormat(item.priceRange[1])} บ.
+            </p>
           </div>
         </div>
       ))}
     </div>
   );
 }
-

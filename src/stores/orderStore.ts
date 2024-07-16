@@ -17,7 +17,7 @@ export interface Product {
   description: string;
   oilViscosity: string;
   liquidVolume: number;
-  price: number;
+  priceRange: number[];
   createdAt: string;
   updatedAt: string;
 }
