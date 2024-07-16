@@ -1,6 +1,8 @@
+import { apiInstance } from "@/api/instance";
 import { Button } from "@/components/ui/button";
 import { useLine } from "@/hooks/useLine";
 import { useLineInfo } from "@/hooks/useLineInfo";
+import { useEffect } from "react";
 
 function IndexPage() {
   const { liffObject, status, login } = useLine();
@@ -31,6 +33,17 @@ function IndexPage() {
       </>
     );
   }
+
+  useEffect(() => {
+    if (status == "inited") {
+      apiInstance({
+        method: "GET",
+        url: "/customer/profile",
+      }).then((res) => {
+        console.log(res.data);
+      });
+    }
+  }, [status]);
 
   if (status == "inited") {
     return (
