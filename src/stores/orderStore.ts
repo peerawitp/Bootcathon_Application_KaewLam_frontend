@@ -22,7 +22,22 @@ export interface Product {
   updatedAt: string;
 }
 
+export interface MobilCenter {
+  id: number;
+  lineUid: string | null;
+  name: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  openingTime: number;
+  closingTime: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 interface OrderStore {
+  selectedCenter: MobilCenter | null;
+  setSelectedCenter: (center: MobilCenter | null) => void;
   selectedCar: Car | null;
   setSelectedCar: (car: Car | null) => void;
   selectedProduct: Product | null;
@@ -38,6 +53,8 @@ interface OrderStore {
 }
 
 export const useOrderStore = create<OrderStore>((set) => ({
+  selectedCenter: null,
+  setSelectedCenter: (center) => set({ selectedCenter: center }),
   selectedCar: null,
   setSelectedCar: (car) => set({ selectedCar: car }),
   selectedProduct: null,
@@ -84,4 +101,14 @@ export const fetchRecommendedOil = (car: Car) => {
     (product) => product.oilViscosity === car.CarModel.oilViscosity,
   );
   useOrderStore.setState({ recommendedOil: matchedViscosity });
+};
+
+export const fetchMobilCenter = (centerId: number) => {
+  apiInstance({ method: "GET", url: `/center/${centerId}` })
+    .then((res) => {
+      useOrderStore.setState({ selectedCenter: res.data });
+    })
+    .catch((error) => {
+      console.error("Error fetching mobil center:", error);
+    });
 };

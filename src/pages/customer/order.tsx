@@ -11,11 +11,12 @@ import InfoM1C from "@/components/booking/m1c-info";
 import OilInfo from "@/components/booking/oil-info";
 import SelectDate from "@/components/booking/select-date";
 import {
+  fetchMobilCenter,
   fetchOilProducts,
   fetchRecommendedOil,
-  Product,
   useOrderStore,
 } from "@/stores/orderStore";
+import { timestampToTime } from "@/lib/utils";
 
 const data = {
   orderId: "1",
@@ -43,20 +44,25 @@ const data = {
 };
 
 export default function OrderPage() {
+  const mockCenterId = 10;
+
   const [selectedItem, setSelectedItem] = useState<{
     label: string;
     value: string;
   } | null>(null);
 
-  const oilProducts = useOrderStore((state) => state.oilProducts);
-  const setOilProducts = useOrderStore((state) => state.setOilProducts);
   const selectedCar = useOrderStore((state) => state.selectedCar);
   const selectedProduct = useOrderStore((state) => state.selectedProduct);
   const setSelectedProduct = useOrderStore((state) => state.setSelectedProduct);
   const recommendedOil = useOrderStore((state) => state.recommendedOil);
+  const selectedCenter = useOrderStore((state) => state.selectedCenter);
 
   useEffect(() => {
     fetchOilProducts();
+  }, []);
+
+  useEffect(() => {
+    fetchMobilCenter(mockCenterId);
   }, []);
 
   useEffect(() => {
@@ -87,10 +93,14 @@ export default function OrderPage() {
           <img src={mobil1} alt="" />
           <div className="flex flex-col  -mt-10 items-center rounded-3xl bg-slate-50  ">
             <InfoM1C
-              name={data.name}
-              review={data.review}
-              date={data.date}
-              address={data.addresM1}
+              name={selectedCenter?.name!}
+              review={4.8}
+              date={
+                timestampToTime(selectedCenter?.openingTime!) +
+                " - " +
+                timestampToTime(selectedCenter?.closingTime!)
+              }
+              address={selectedCenter?.address!}
             />
             <hr
               style={{ borderTop: "1px solid lightgrey" }}
