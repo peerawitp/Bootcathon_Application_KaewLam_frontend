@@ -2,11 +2,13 @@ import { useEffect } from "react";
 import liff from "@line/liff";
 
 import { useLineStore } from "@/stores/lineStore";
+import { isTokenExpired } from "@/lib/jwt";
 
-export type Status = "signin" | "inited";
+export type Status = "loading" | "signin" | "inited";
 
 export const useLine = () => {
-  const { liffObject, status, setLiffObject, setStatus } = useLineStore();
+  const { liffObject, status, setLiffObject, setStatus, setIdToken } =
+    useLineStore();
 
   const login = () => {
     liffObject?.login({});
@@ -23,7 +25,19 @@ export const useLine = () => {
       .init({ liffId: import.meta.env.VITE_LIFF_APP_ID })
       .then(() => {
         setLiffObject(liff);
-        if (liff.isLoggedIn()) setStatus("inited");
+        if (liff.isLoggedIn()) {
+          setStatus("inited");
+          const idToken = liff.getIDToken() as string;
+          setIdToken(idToken);
+
+          const isExpired = isTokenExpired(idToken);
+          console.log("isExpired", isExpired);
+          if (isExpired) {
+            liff.logout();
+          }
+        } else {
+          setStatus("signin");
+        }
       })
       .catch((err: any) => {
         console.error({ err });
