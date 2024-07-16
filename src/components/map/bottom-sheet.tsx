@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import {
     Sheet,
     SheetContent,
@@ -28,7 +28,8 @@ interface BottomSheetProps {
 
     setIsSheetOpen: (value: boolean) => void;
     setLocationPoint: (value: any) => void;
-    renderItem: (data: any, setLocationPoint: (value: any) => void, setIsSheetOpen: (value: boolean) => void) => ReactNode;
+    renderItem: (data: any, setLocationPoint: (value: any) => void, 
+    setIsSheetOpen: (value: boolean) => void) => ReactNode;
 }
 
 export default function BottomSheet({
@@ -42,33 +43,16 @@ export default function BottomSheet({
     loading,
     error,
 }: BottomSheetProps) {
-    const sheetContentRef = useRef<HTMLDivElement>(null);
-    const [forceRerender, setForceRerender] = useState<boolean>(true);
+
+    const [isOverflow, setIsOverflow] = useState(false);
+    const contentHeight = isOverflow ? 'h-screen' : 'h-2/3';
+
+    const handleScroll = (e: any) => {
+        setIsOverflow(e.target.scrollTop >= 0);
+      };
 
     useEffect(() => {
-        console.log('forceRerender', forceRerender);
-        const handleScroll = (e: any) => {
-            if (e.target.scrollTop > 20) {
-                setForceRerender(true);
-            }
-            else {
-                setForceRerender(false);
-            }
-        };
-
-        if (sheetContentRef.current) {
-            sheetContentRef.current.addEventListener('scroll', handleScroll);
-        }
-
-        return () => {
-            if (sheetContentRef.current) {
-                sheetContentRef.current.removeEventListener('scroll', handleScroll);
-            }
-        };
-    }, [forceRerender]);
-
-    useEffect(() => {
-        setForceRerender(prev => !prev);
+        setIsOverflow(false);
     }, [isSheetOpen]);
 
     const renderContent = () => {
@@ -84,7 +68,11 @@ export default function BottomSheet({
         }
 
         if (listData.length > 0) {
-            return listData.map((data) => renderItem(data, setLocationPoint, setIsSheetOpen));
+            return listData.map((data, index) => (
+                <div key={index}>
+                    {renderItem(data, setLocationPoint, setIsSheetOpen)}
+                </div>
+            ));
         } else {
             return <p>No data available</p>;
         }
@@ -95,8 +83,8 @@ export default function BottomSheet({
             <Sheet key="bottom" open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                 <SheetContent
                     side="bottom"
-                    className={`h-${forceRerender ? 'screen' : '2/3'} overflow-y-scroll rounded-t-3xl transition-all duration-300`}
-                    ref={sheetContentRef}
+                    className={`overflow-y-scroll rounded-t-3xl transition-all duration-300 ${contentHeight}`}
+                    onScroll={handleScroll}
                 >
                     <SheetHeader>
                         <SheetTitle>{title}</SheetTitle>

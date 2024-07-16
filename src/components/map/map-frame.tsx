@@ -7,13 +7,13 @@ import { Button } from "../ui/button";
 import { distance_btw } from "@/lib/map/distance-btw";
 
 const marker_user_icon = new L.Icon({
-  iconUrl: "/marker-user.svg",
-  iconSize: [40, 40],
+  iconUrl: "/marker-user.png",
+  iconSize: [30, 40],
   iconAnchor: [16, 32],
 });
 const marker_center_icon = new L.Icon({
-  iconUrl: "/marker-center.svg",
-  iconSize: [40, 40],
+  iconUrl: "/marker-center.png",
+  iconSize: [30, 40],
   iconAnchor: [16, 32],
 });
 
