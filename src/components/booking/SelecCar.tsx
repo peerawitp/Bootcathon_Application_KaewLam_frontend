@@ -12,7 +12,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { validateHeaderValue } from "http";
 
 export function SelectCar() {
   const [position, setPosition] = React.useState("bottom");

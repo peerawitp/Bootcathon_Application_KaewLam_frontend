@@ -10,6 +10,7 @@ import LoadingCarAnimation from "@/assets/lotties/loading_car.json";
 import ComfirmOrderPage from "@/pages/customer/confirm";
 import ReviewPage from "@/pages/customer/review";
 import RewardPage from "@/pages/customer/rewards";
+import CouponPage from "@/pages/customer/coupon";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { liffObject, status } = useLine();
@@ -73,6 +74,14 @@ export const Router = () => {
             element={
               <ProtectedRoute>
                 <RewardPage/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/customer/coupon"
+            element={
+              <ProtectedRoute>
+                <CouponPage/>
               </ProtectedRoute>
             }
           />

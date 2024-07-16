@@ -1,4 +1,3 @@
-import * as React from "react";
 import picReward from "@/assets/picDetailReward.png";
 import { Heart } from 'lucide-react';
 import PointExchangeButton from "@/components/rewards/button-exchange";
