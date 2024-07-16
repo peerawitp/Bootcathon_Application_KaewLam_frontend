@@ -1,12 +1,15 @@
-import { Suspense } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Suspense, useEffect, useState } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+} from "react-router-dom";
 import Lottie from "react-lottie";
 
 import IndexPage from "@/pages/index";
 import CustomerBookPage from "@/pages/customer/book";
-
-import { useLine } from "@/hooks/useLine";
-import LoadingCarAnimation from "@/assets/lotties/loading_car.json";
 import ComfirmOrderPage from "@/pages/customer/confirm";
 import ReviewPage from "@/pages/customer/review";
 import RewardPage from "@/pages/customer/rewards";
@@ -16,19 +19,23 @@ import Profile from "@/pages/customer/profile";
 import RegisterPage from "@/pages/customer/register";
 import AddCarPage from "@/pages/customer/add-car";
 
+import { useLine } from "@/hooks/useLine";
+import LoadingCarAnimation from "@/assets/lotties/loading_car.json";
+import { apiInstance } from "@/api/instance";
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: LoadingCarAnimation,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
+
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { liffObject, status } = useLine();
 
   console.log(status);
-
-  const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: LoadingCarAnimation,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
-  };
 
   if (liffObject) {
     if (status === "inited") return children;
@@ -43,6 +50,51 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   }
 };
 
+const MemberRoute = ({ children }: { children: React.ReactNode }) => {
+  const { status } = useLine();
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAllowed, setIsAllowed] = useState(false);
+
+  useEffect(() => {
+    if (status === "inited") {
+      apiInstance({
+        method: "GET",
+        url: "/customer/status",
+      })
+        .then((res) => {
+          if (res.data) {
+            if (res.data.isRegistered) {
+              if (res.data.isCarRegistered) {
+                setIsAllowed(true);
+              } else {
+                navigate("/customer/add-car");
+              }
+            } else {
+              navigate("/customer/register");
+            }
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching customer profile:", error);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+  }, [status, navigate]);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Lottie options={defaultOptions} height={300} width={300} />
+      </div>
+    );
+  }
+
+  return isAllowed ? children : null;
+};
+
 export const Router = () => {
   return (
     <BrowserRouter>
@@ -53,7 +105,9 @@ export const Router = () => {
             path="/customer/book"
             element={
               <ProtectedRoute>
-                <CustomerBookPage />
+                <MemberRoute>
+                  <CustomerBookPage />
+                </MemberRoute>
               </ProtectedRoute>
             }
           />
@@ -61,7 +115,9 @@ export const Router = () => {
             path="/customer/confirm"
             element={
               <ProtectedRoute>
-                <ComfirmOrderPage />
+                <MemberRoute>
+                  <ComfirmOrderPage />
+                </MemberRoute>
               </ProtectedRoute>
             }
           />
@@ -69,7 +125,9 @@ export const Router = () => {
             path="/customer/review"
             element={
               <ProtectedRoute>
-                <ReviewPage />
+                <MemberRoute>
+                  <ReviewPage />
+                </MemberRoute>
               </ProtectedRoute>
             }
           />
@@ -77,7 +135,9 @@ export const Router = () => {
             path="/customer/order"
             element={
               <ProtectedRoute>
-                <OrderPage />
+                <MemberRoute>
+                  <OrderPage />
+                </MemberRoute>
               </ProtectedRoute>
             }
           />
@@ -85,7 +145,9 @@ export const Router = () => {
             path="/customer/rewards"
             element={
               <ProtectedRoute>
-                <RewardPage/>
+                <MemberRoute>
+                  <RewardPage />
+                </MemberRoute>
               </ProtectedRoute>
             }
           />
@@ -93,7 +155,9 @@ export const Router = () => {
             path="/customer/coupon"
             element={
               <ProtectedRoute>
-                <CouponPage/>
+                <MemberRoute>
+                  <CouponPage />
+                </MemberRoute>
               </ProtectedRoute>
             }
           />
@@ -101,7 +165,9 @@ export const Router = () => {
             path="/customer/profile"
             element={
               <ProtectedRoute>
-                <Profile/>
+                <MemberRoute>
+                  <Profile />
+                </MemberRoute>
               </ProtectedRoute>
             }
           />
