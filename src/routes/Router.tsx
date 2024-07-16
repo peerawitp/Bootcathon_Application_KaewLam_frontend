@@ -12,7 +12,7 @@ import ReviewPage from "@/pages/customer/review";
 import RewardPage from "@/pages/customer/rewards";
 import CouponPage from "@/pages/customer/coupon";
 import OrderPage from "@/pages/customer/order";
-
+import Profile from "@/pages/customer/profile";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { liffObject, status } = useLine();
@@ -92,6 +92,14 @@ export const Router = () => {
             element={
               <ProtectedRoute>
                 <CouponPage/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/customer/profile"
+            element={
+              <ProtectedRoute>
+                <Profile/>
               </ProtectedRoute>
             }
           />
