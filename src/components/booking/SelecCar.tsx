@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export function SelectCar() {
-  const [position, setPosition] = React.useState("bottom");
+  const [position, setPosition] = useState("bottom");
   const [selectedItem, setSelectedItem] = useState<{ label: string; value: string } | null>(null);
 
   const menuItems = [
@@ -34,11 +34,13 @@ export function SelectCar() {
   const initialLabel = menuItems.length > 0 ? menuItems[0].label : 'Select an option';
 
   return (
+    <div className="w-full flex flex-col gap-2">
+    <p className="font-bold">รถที่ใช้บริการ</p>
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="flex justify-center">
-            <Button variant="outline" onClick={handleButtonClick} className="w-96 h-[45px] rounded-[15px] border-[#B4B4B4]">
-                <div className="flex justify-between w-full">
+        <div className="flex justify-center w-full ">
+            <Button variant="outline" onClick={handleButtonClick} className= "w-full  h-[45px] rounded-[15px] border-[#B4B4B4]">
+                <div className="flex justify-between items-center w-full">
                     {selectedItem ? `${selectedItem.label}` : initialLabel} 
                     <ChevronDown className="pt-1"/>
                 </div>
@@ -57,6 +59,7 @@ export function SelectCar() {
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
+    </div>
   );
 }
 
