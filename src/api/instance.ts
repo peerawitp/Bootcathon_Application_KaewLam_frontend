@@ -12,7 +12,7 @@ const apiInstance = axios.create({
 const mapApiInstance = axios.create({
   baseURL: import.meta.env.VITE_MAP_API,
   headers: {},
-  timeout: 1000,
+  timeout: 10000,
 });
 
 apiInstance.interceptors.request.use(

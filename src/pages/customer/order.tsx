@@ -14,40 +14,14 @@ import {
   fetchMobilCenter,
   fetchOilProducts,
   fetchRecommendedOil,
-  MobilCenter,
   useOrderStore,
 } from "@/stores/orderStore";
 import { currencyFormat, timestampToTime } from "@/lib/utils";
 import { distance_btw } from "@/lib/map/distance-btw";
-
-const data = {
-  orderId: "1",
-  name: "Mobil 1 Center - เขตคลองสาน",
-  addresM1: "20 ถ. กรุงธนบุรี  แขวงบางลำภูล่าง เขตคลองสาน กรุงเทพมหานคร 10600",
-  review: 4.5,
-  date: "จันทร์ - ศุกร์   10:00 am - 20:00 pm  ",
-  product: [
-    {
-      name: "Mobil 1™ Triple Action Power",
-      detail:
-        "Mobil 1™ Triple Action Power น้ำมันเครื่องสังเคราะห์แท้ขั้นสูงที่มอบสมรรถนะ การปกป้อง และความสะอาดของเครื่องยนต์ที่ยอดเยี่ยม <br/>สมรรถนะเครื่องยนต์: ให้เครื่องยนต์ทำงานเหมือนใหม่อยู่เสมอ <br/>ปกป้อง: ดีกว่า 10 เท่า4 ภายใต้ความร้อนสูง  <br/>ทำความสะอาด: จัดการกับตะกอนน้ำมันด้วยสารทำความสะอาด",
-      price: "~ 1,000-1,200 บ.",
-    },
-    {
-      name: "Mobil 1™ Triple Action Power+",
-      detail:
-        "Mobil 1™ สูตรใหม่ Triple Action Power+ เป็นน้ำมันเครื่องสังเคราะห์แท้ขั้นสูงที่มอบสมรรถนะ การปกป้อง และความสะอาดของเครื่องยนต์ที่ยอดเยี่ยม พร้อมทั้งประโยชน์เพิ่มเติมด้านการประหยัดเชื้อเพลิง สมรรถนะเครื่องยนต์: ทรงพลังยาวนาน <br/>ปกป้อง: ดีกว่า 30 เท่า1ภายใต้ความร้อนสูง <br/>ทำความสะอาด: ป้องกันสารปนเปื้อนกรดอันตราย ที่ทำลายเครื่องยนต์ได้ถึง 99.9%2 <br/>เพิ่มประสิทธิภาพเครื่องยนต์: เพื่อการประหยัดเชื้อเพลิงที่ดีขึ้นถึง 8.4%3",
-      price: "~ 1,200-1,300 บ.",
-    },
-  ],
-  service: 350,
-  discount: 0,
-  total: "~ 1,550 - 1,650 บ.",
-};
+import { useNavigate } from "react-router-dom";
 
 export default function OrderPage() {
-  const mockCenterId = 10;
-  const userLocation = { latitude: 13.7563, longitude: 100.5018 };
+  const navigate = useNavigate();
 
   const [selectedItem, setSelectedItem] = useState<{
     label: string;
@@ -59,13 +33,23 @@ export default function OrderPage() {
   const setSelectedProduct = useOrderStore((state) => state.setSelectedProduct);
   const recommendedOil = useOrderStore((state) => state.recommendedOil);
   const selectedCenter = useOrderStore((state) => state.selectedCenter);
+  const userLocation = useOrderStore((state) => state.userLocation);
+  const setSelectedDateTime = useOrderStore(
+    (state) => state.setSelectedDateTime,
+  );
 
-  const [serviceCost, setServiceCost] = useState(0);
+  const serviceCost = useOrderStore((state) => state.serviceCost);
+  const setServiceCost = useOrderStore((state) => state.setServiceCost);
+
   const [totalCost, setTotalCost] = useState<number[]>([0.0, 0.0]);
+
+  if (!selectedCenter) {
+    navigate("/customer/book");
+  }
 
   useEffect(() => {
     fetchOilProducts();
-    fetchMobilCenter(mockCenterId);
+    fetchMobilCenter(selectedCenter?.id as number);
   }, []);
 
   useEffect(() => {
@@ -95,7 +79,7 @@ export default function OrderPage() {
         parseInt(
           distance_btw(
             [selectedCenter.latitude, selectedCenter.longitude],
-            [userLocation.latitude, userLocation.longitude],
+            [userLocation[0], userLocation[1]],
           ).toFixed(0),
           10,
         ) <= 5
@@ -103,7 +87,7 @@ export default function OrderPage() {
           : (parseInt(
               distance_btw(
                 [selectedCenter.latitude, selectedCenter.longitude],
-                [userLocation.latitude, userLocation.longitude],
+                [userLocation[0], userLocation[1]],
               ).toFixed(0),
               10,
             ) -
@@ -118,12 +102,19 @@ export default function OrderPage() {
   const [date, setDate] = useState<Date>(new Date());
 
   const submitOrder = () => {
+    const selectedDateTime = new Date(date);
+    const selectedTime = selectedItem?.label.split(":");
+    selectedDateTime.setHours(parseInt(selectedTime![0], 10));
+    selectedDateTime.setMinutes(parseInt(selectedTime![1], 10));
+
+    setSelectedDateTime(selectedDateTime);
     console.log({
       selectedCar,
       selectedProduct,
       selectedItem,
       date,
     });
+    navigate("/customer/confirm");
   };
 
   return (

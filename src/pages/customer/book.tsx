@@ -6,9 +6,13 @@ import BottomSheet from "@/components/map/bottom-sheet";
 import { Button } from "@/components/ui/button";
 import Renderer from "@/components/map/renderer";
 import { mapApiInstance } from "@/api/instance";
+import { useNavigate } from "react-router-dom";
+import { useOrderStore } from "@/stores/orderStore";
 
 function CustomerBookPage() {
-  const [locationPoint, setLocationPoint] = useState<any>([0, 0]);
+  const navigate = useNavigate();
+
+  const [locationPoint, setLocationPoint] = useState<[number, number]>([0, 0]);
   const [mapData, setMapData] = useState<any[]>([]);
   const [mobilCenterLocation, setMobilCenterLocation] = useState<any[]>([]);
 
@@ -21,6 +25,10 @@ function CustomerBookPage() {
 
   const [reverseData, setReverseData] = useState<any>(null);
   const [address, setAddress] = useState<string>("Loading...");
+
+  const setUserLocation = useOrderStore((state) => state.setUserLocation);
+  const setSelectedCenter = useOrderStore((state) => state.setSelectedCenter);
+  const setUserAddress = useOrderStore((state) => state.setUserAddress);
 
   const mobilCenter = new Renderer({
     setLocationPoint,
@@ -42,7 +50,7 @@ function CustomerBookPage() {
     navigator.geolocation.getCurrentPosition((position) => {
       mapApiInstance
         .get(
-          `/reverse?format=jsonv2&lat=${position.coords.latitude}&lon=${position.coords.longitude}`,
+          `/reverse?format=jsonv2&lat=${position.coords.latitude}&lon=${position.coords.longitude}&accept-language=th`,
         )
         .then((res) => {
           setReverseData(res.data);
@@ -82,6 +90,10 @@ function CustomerBookPage() {
 
   const onSubmit = () => {
     console.log(selected, locationPoint);
+    setSelectedCenter(selected);
+    setUserLocation(locationPoint);
+    setUserAddress(address);
+    navigate("/customer/order");
   };
 
   return (
