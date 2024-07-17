@@ -18,6 +18,7 @@ import OrderPage from "@/pages/customer/order";
 import Profile from "@/pages/customer/profile";
 import RegisterPage from "@/pages/customer/register";
 import AddCarPage from "@/pages/customer/add-car";
+import RewardDetailPage from "@/pages/customer/reward-detail";
 
 import { useLine } from "@/hooks/useLine";
 import LoadingCarAnimation from "@/assets/lotties/loading_car.json";
@@ -147,6 +148,16 @@ export const Router = () => {
               <ProtectedRoute>
                 <MemberRoute>
                   <RewardPage />
+                </MemberRoute>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/customer/reward-detail"
+            element={
+              <ProtectedRoute>
+                <MemberRoute>
+                  <RewardDetailPage />
                 </MemberRoute>
               </ProtectedRoute>
             }
