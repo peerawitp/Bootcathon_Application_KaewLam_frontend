@@ -6,6 +6,11 @@ import TotalRewards from "@/components/rewards/total-rewards";
 
 
 export default function ReviewPage() {
+    const data = {
+        couponID: "1",
+        nameCoupon: "GenPay Gift Voucher",
+        value: 500,
+      };
  
     return (
       <CustomerLayout>

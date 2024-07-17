@@ -6,16 +6,10 @@ import { Button } from "@/components/ui/button"
 
 
 export function TotalRewards() {
-    const data = {
-        couponID: "1",
-        nameCoupon: "GenPay Gift Voucher",
-        value: 500,
-      };
-
 
   return (
     <div className="grid grid-cols-1 gap-5">
-        <div className="bg-[url('D:\mobil-1-services\src\assets\picHotCard.png')] w-[374px] h-[198px]">
+        <div className="bg-[url('@/assets/picHotCard.png')] w-[374px] h-[198px]">
           <div className="flex pl-3 pt-3">
             <img src={hotIcon} alt="" style={{ width: '40px', height: '40px'}}/>
               <div className="pl-2 flex flex-col justify-center  text-white">

@@ -1,6 +1,3 @@
-import hotReward from "@/assets/picCardReward.png"
-import { point } from "leaflet";
-
 
 export function RewardCard() {
     const data = {
@@ -13,25 +10,13 @@ export function RewardCard() {
 
 
   return (
-    <div>
-        <div>
-        <div className="bg-[url('D:\mobil-1-services\src\assets\picCardReward.png')] w-[173px] h-[189px] flex flex-col justify-end text-white">
-            <div className="pl-3">
-                <p className="text-[14px]">{data.nameCoupon}</p>
-                <p className="text-[10px]">มูลค่า {data.value} บาท...</p>
-            </div>
-            <div className="flex justify-end">
-                <p className="text-[14px] font-bold pb-2 pr-3">{data.point} pts</p>
-            </div>
-            
-
+    <div className="bg-[url('@/assets/picCardReward.png')] w-[173px] h-[189px] flex flex-col justify-end text-white">
+        <div className="pl-3">
+            <p className="text-[14px]">{data.nameCoupon}</p>
+            <p className="text-[10px]">มูลค่า {data.value} บาท...</p>
         </div>
-        </div>
-        <div>
-
-        </div>
-        <div>
-          
+        <div className="flex justify-end">
+            <p className="text-[14px] font-bold pb-2 pr-3">{data.point} pts</p>
         </div>
     </div>
    
