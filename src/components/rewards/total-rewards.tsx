@@ -3,14 +3,16 @@ import RewardCard from "@/components/rewards/reward-card"
 import { SearchIcon } from 'lucide-react';
 import { Menu } from 'lucide-react';
 import { Button } from "@/components/ui/button"
+import { useNavigate } from "react-router-dom";
 
 
 export function TotalRewards() {
+  const narigate = useNavigate();
 
   return (
     <div className="grid grid-cols-1 gap-5">
-        <div className="bg-[url('@/assets/picHotCard.png')] w-[374px] h-[198px]">
-          <div className="flex pl-3 pt-3">
+        <div className="bg-[url('@/assets/picHotCard.png')] w-[374px] h-[198px] " onClick={()=>narigate("/customer/reward-detail")}>
+          <div className="flex pl-3 pt-3" >
             <img src={hotIcon} alt="" style={{ width: '40px', height: '40px'}}/>
               <div className="pl-2 flex flex-col justify-center  text-white">
                 <p className="font-bold text-[14px]">Most Likes</p>

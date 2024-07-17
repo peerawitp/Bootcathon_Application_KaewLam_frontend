@@ -2,10 +2,11 @@ import CustomerLayout from "@/components/layouts/CustomerLayout";
 import { Button } from "@/components/ui/button";
 import couponIcon from "@/assets/coupon_icon.png";
 import TotalRewards from "@/components/rewards/total-rewards";
+import { useNavigate } from "react-router-dom";
 
 
 export default function RewardPage() {
-    
+    const narigate = useNavigate();
   
     return (
       <CustomerLayout>
@@ -19,7 +20,7 @@ export default function RewardPage() {
                     </h1>
                 </div>
                 <div className="pl-[14px] w-[120px] h-[130px] ">
-                    <Button className="w-full h-full drop-shadow-lg flex flex-col text-[16px] font-medium gap-3 bg-[#EDEBF2] border-[#D4D4D4]" variant="outline">
+                    <Button className="w-full h-full drop-shadow-lg flex flex-col text-[16px] font-medium gap-3 bg-[#EDEBF2] border-[#D4D4D4]" variant="outline" onClick={()=>narigate("/customer/coupon")}>
                     <img src={couponIcon} alt="" style={{ width: '40px', height: '40px'}}/>
                     คูปองของฉัน
                     </Button>
