@@ -4,7 +4,7 @@ import { IoChevronForwardOutline } from "react-icons/io5";
 import {  Drawer,DrawerTrigger } from "../ui/drawer";
 import HistoryDrawer from "./history";
 
-const TrackCard = ({ item }: any) => {
+const TrackCard = ({ item , CustomerCarData }: any) => {
     const maxAddressLength = 20;
     const truncateAddress = (address: string, maxLength: number) => {
       if (address.length > maxLength) {
@@ -16,7 +16,7 @@ const TrackCard = ({ item }: any) => {
     return (
       <Drawer>
       <DrawerTrigger> 
-      <div onClick={() => console.log('go to nha sud tai')} className="flex flex-row shadow-lg w-full h-full p-3 rounded-xl gap-2 hover:cursor-pointer">
+      <div className="flex flex-row shadow-lg w-full h-full p-3 rounded-xl gap-2 hover:cursor-pointer">
         <div className="w-3/12 flex justify-center rounded-xl h-fit">
           <img src="/fuel-icon.svg" alt="" />
         </div>
@@ -37,7 +37,7 @@ const TrackCard = ({ item }: any) => {
         </div>
       </div>
       </DrawerTrigger>
-      <HistoryDrawer />
+      <HistoryDrawer historyData={item} CustomerCarData={CustomerCarData} />
       </Drawer>
     );
   };
