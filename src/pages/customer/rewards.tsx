@@ -2,11 +2,11 @@ import CustomerLayout from "@/components/layouts/CustomerLayout";
 import { Button } from "@/components/ui/button";
 import couponIcon from "@/assets/coupon_icon.png";
 import RewardDetail from "@/components/rewards/reward-detail";
+import TotalRewards from "@/components/rewards/total-rewards";
 
 
 export default function ReviewPage() {
-    
-  
+ 
     return (
       <CustomerLayout>
         <div>
@@ -26,7 +26,7 @@ export default function ReviewPage() {
                 </div>
             </div>
             <div className="px-6">
-                <RewardDetail></RewardDetail>
+                <TotalRewards></TotalRewards>
             </div>   
             
         </div>
