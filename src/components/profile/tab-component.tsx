@@ -198,7 +198,7 @@ export function TabComponent() {
 
   const renderTrack = () => {
     return bookingHistoryData.map((item, index) => (
-      <TrackCard key={index} item={item} />
+      <TrackCard key={index} item={item} CustomerCarData={CustomerCarData} />
     ));
   };
 

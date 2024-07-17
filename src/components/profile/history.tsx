@@ -4,39 +4,21 @@ import { formatThaiTimestamp } from "@/lib/profile/format-time";
 import { Button } from "../ui/button";
 import { DrawerContent } from "../ui/drawer";
 import CardOil from "./card-oil";
-import { Product } from "@/stores/orderStore";
 
+export default function HistoryDrawer({historyData ,CustomerCarData}: any) {
 
-const bookingData = {
-  mobil1Name: "Mobil 1 center - เขตคลองสาน",
-  bookingDate: "2022-01-01 10:34 น.",
-  mobil1Address:
-    "110 1 ถ. กรุงธนบุรี แขวงบางลำภูล่าง เขตคลองสาน กรุงเทพมหานคร 10600",
-  customerAddress:
-    "20 ถ. กรุงธนบุรี แขวงบางลำภูล่าง เขตคลองสาน กรุงเทพมหานคร 10600",
-  carBrand: "Mercedes-Benz",
-  carModel: "c220 2.0 W205 AMG Dynamic 2019",
-};
-const product: Product = {
-  id: 1,
-  name: "Mobil 1™ Triple Action Power+",
-  description:
-    "น้ำมันเครื่องสังเคราะห์เต็มรูปแบบที่ออกแบบมาเพื่อให้เครื่องยนต์ของคุณทำงานเหมือนใหม่โดยให้ความคุ้มค่าในการป้องกันการสึกกร่อนที่ยอดเยี่ยม พลังการทำความสะอาดที่ยอดเยี่ยม และประสิทธิภาพโดยรวมที่ยอดเยี่ยม",
-  oilViscosity: "5W-30",
-  liquidVolume: 5,
-  priceRange: [50, 60],
-  createdAt: "2022-01-01",
-  updatedAt: "2022-01-02",
-};
+  const getUserCar = (id: number) => {
+    return CustomerCarData.find((car: any) => car.id === id).CarModel;
+  }
 
+  const userCar = getUserCar(historyData.UserCar.id);
 
-export default function HistoryDrawer() {
   return (
     <DrawerContent className="p-5 flex flex-col gap-3 ">
       <div className="flex flex-col gap-2 pt-3">
-        <p className=" text-2xl font-bold">{bookingData.mobil1Name}</p>
+        <p className=" text-2xl font-bold">Mobil 1 center - {historyData.MobilCenter.name}</p>
         <p className="text-base font-light text-gray-400">
-          {formatThaiTimestamp(bookingData.bookingDate)}
+          {formatThaiTimestamp(historyData.bookingDate)}
         </p>
       </div>
       <hr
@@ -45,16 +27,16 @@ export default function HistoryDrawer() {
       />
       <div className="flex flex-col gap-2 ">
         <div>
-        <p className=" text-lg font-bold">{bookingData.carBrand}</p>
-        <p className=" text-lg font-bold">{bookingData.carModel}</p>
+        <p className=" text-lg font-bold">{userCar.brandName}</p>
+        <p className=" text-lg font-bold">{userCar.model} {userCar.year}</p>
         </div>
         <div className="flex gap-2 items-center my-2">
           <img src={pin} alt="" className="h-8" />
-          <p className=" px-5 text-wrap">{bookingData.customerAddress}</p>
+          <p className=" px-5 text-wrap">{historyData.customerAddress}</p>
         </div>
         <div className="flex gap-2 items-center my-2">
           <img src={mobil_pin} alt="" className="h-8" />
-          <p className=" px-5 text-wrap">{bookingData.mobil1Address}</p>
+          <p className=" px-5 text-wrap">{historyData.MobilCenter.address}</p>
         </div>
       </div>
       <hr
@@ -64,7 +46,7 @@ export default function HistoryDrawer() {
       <div className="flex flex-col gap-2 ">
         <p className=" text-lg font-bold">บริการ</p>
         <p className=" text-base font-light">เปลี่ยนน้ำมันเครื่อง</p>
-        <CardOil product={product} />
+        <CardOil product={historyData.Product} />
       </div>
       <Button className="m-5 bg-[#0E479F]">ใช้บริการอีกครั้ง</Button>
     </DrawerContent>
