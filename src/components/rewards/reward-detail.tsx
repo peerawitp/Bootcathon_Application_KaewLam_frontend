@@ -11,7 +11,6 @@ export function RewardDetail() {
       };
 
 
-
   return (
     <div>
         <div className="flex justify-center">

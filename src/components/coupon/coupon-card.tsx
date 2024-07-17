@@ -12,7 +12,7 @@ export function CouponCard() {
 
   return (
     <div className="flex justify-center">
-        <div className="w-[385px] h-[120px] bg-[url('D:\CNC\Exxon_Mobil\mobil-1-services\src\assets\coupon_bg.png')] bg-transparent hover:bg-transparent flex flex-col justify-center mt-4">
+        <div className="w-[385px] h-[120px] bg-[url('@/assets/coupon_bg.png')] bg-transparent hover:bg-transparent flex flex-col justify-center mt-4">
         <div className="grid grid-cols-3 gap-[29px] ">
             <img src={logo} alt="" className="w-[82px] h-[33px] ml-8 mt-5"/>
             <div className="flex col-span-2 ml-3">

@@ -1,13 +1,13 @@
 import CustomerLayout from "@/components/layouts/CustomerLayout";
 import { Button } from "@/components/ui/button";
 import couponIcon from "@/assets/coupon_icon.png";
-import TotalRewards from "@/components/rewards/total-rewards";
+import RewardDetail from "@/components/rewards/reward-detail";
 import { useNavigate } from "react-router-dom";
 
 
-export default function RewardPage() {
+export default function RewardDetailPage() {
     const narigate = useNavigate();
-  
+
     return (
       <CustomerLayout>
         <div>
@@ -27,7 +27,7 @@ export default function RewardPage() {
                 </div>
             </div>
             <div className="px-6">
-                <TotalRewards></TotalRewards>
+                <RewardDetail></RewardDetail>
             </div>   
             
         </div>
