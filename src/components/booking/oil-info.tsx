@@ -43,12 +43,12 @@ export default function OilInfo({
               <DialogTrigger asChild>
                 <Button
                   variant="link"
-                  className="w-fit h-fit p-0 m-0 font-light text-[#0E479F]"
+                  className="w-fit h-fit p-0 m-0 font-light text-[#0E479F] underline"
                 >
                   เพิ่มเติม
                 </Button>
               </DialogTrigger>
-              <DialogContent className="m-5 ">
+              <DialogContent>
                 <DialogHeader>
                   <DialogTitle>{item.name}</DialogTitle>
                   <DialogDescription>
