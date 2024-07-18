@@ -10,7 +10,7 @@ export default function RewardPage() {
   
     return (
       <CustomerLayout>
-        <div>
+        <div className=" w-full flex flex-col items-center justify-center">
             <div className="flex justify-center pt-[28px] pb-[24px]">
                 <div className="bg-[#0E479F] w-[250px] p-5 rounded-lg font-bold">
                     <p className="text-white text-[16px]">แต้มของคุณ:</p>
